@@ -2,13 +2,18 @@
   <nav class="navbar d-flex justify-content-end bg-dark">
     <ul class="list-unstyled d-flex align-content-center p-0 m-0">
       <li class="ml-1 mr-1">
-        <a class="nav-item nav-link text-decoration-none text-light" routerLink="" routerLinkActive="active">Main Page</a>
+        <a class="nav-item nav-link text-decoration-none text-light"
+           routerLink="main" routerLinkActive="active" *ngIf="user">Main Page</a>
       </li>
       <li class="ml-1 mr-1">
         <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
       </li>
       <li class="ml-1 mr-1">
-        <a class="nav-item nav-link text-decoration-none text-light" routerLink="registration">Registration</a>
+        <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
+      </li>
+      <li class="ml-1 mr-1" *ngIf="user">
+        <a class="nav-item nav-link text-decoration-none text-light" routerLink="main"
+           routerLinkActive="active">LogOut</a>
       </li>
     </ul>
   </nav>
