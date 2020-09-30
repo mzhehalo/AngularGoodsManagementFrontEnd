@@ -1,0 +1,9 @@
+<div ngbDropdown class="d-inline-block" display="dynamic">
+  <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>Profile</button>
+  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu-right">
+    <button ngbDropdownItem routerLink="edit" class="border-bottom">{{user.lastName}} {{user}}</button>
+    <button ngbDropdownItem routerLink="edit">Edit Profile</button>
+    <button ngbDropdownItem routerLink="{{routerName}}/main" *ngIf="user">Main</button>
+    <button ngbDropdownItem routerLink="logout">LogOut</button>
+  </div>
+</div>

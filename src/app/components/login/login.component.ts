@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Directive, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../user/user.service';
-import {UserModel} from '../../model/UserModel';
-import {UserLoginModel} from '../../model/UserLoginModel';
+import {ActivatedRoute} from '@angular/router';
+import {LoginService} from './login.service';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,24 +12,22 @@ import {UserLoginModel} from '../../model/UserLoginModel';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  userPresent: UserModel;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService) {
-    this.loginForm = formBuilder.group({
-      name: ['', [Validators.required]],
-      password: ['', [Validators.required]]
-    });
-
-    console.log(this.loginForm);
+  constructor(private formBuilder: FormBuilder, private loginService: LoginService, private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      firstName: ['', [Validators.required]],
+      password: ['', [Validators.required]]
+    });
   }
 
-  validateUser(): void {
-    this.userService.validateUser({
-      name: this.loginForm.value.name,
+  login(): Observable<any> {
+    return this.loginService.login({
+      firstName: this.loginForm.value.firstName,
       password: this.loginForm.value.password
-    }).subscribe(value => this.userPresent = value);
+    });
+    // this.activatedRoute.data.subscribe(value => console.log(value));
   }
 }

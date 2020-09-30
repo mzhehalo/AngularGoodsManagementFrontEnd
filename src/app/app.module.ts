@@ -10,6 +10,12 @@ import {RegisterComponent} from './components/register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {UserComponent} from './components/user/user.component';
 import {HttpClientModule} from '@angular/common/http';
+import {LoginGuard} from './guards/login.guard';
+import {ProfileMenuComponent} from './components/profile-menu/profile-menu.component';
+import { EditUserComponent } from './components/edit-user/edit-user.component';
+import { HeaderComponent } from './components/header/header.component';
+import { MyAutoFocusDirective } from './directive/my-auto-focus.directive';
+import {User2Component} from './components/user2/user2.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +24,11 @@ import {HttpClientModule} from '@angular/common/http';
     LoginComponent,
     RegisterComponent,
     UserComponent,
+    User2Component,
+    ProfileMenuComponent,
+    EditUserComponent,
+    HeaderComponent,
+    MyAutoFocusDirective,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +37,7 @@ import {HttpClientModule} from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [LoginGuard, LoginComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
