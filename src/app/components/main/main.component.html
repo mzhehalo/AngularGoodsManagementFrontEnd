@@ -1,1 +1,11 @@
-<p>main works!</p>
+<div class="row">
+  <div class="col">
+    <app-filters></app-filters>
+  </div>
+  <div class="col-md-8">
+    <app-product-list [ProductsFromDataBase]="ProductsFromDataBase"></app-product-list>
+  </div>
+  <div class="col">
+    <app-cart [ProductsFromDataBase]="ProductsFromDataBase"></app-cart>
+  </div>
+</div>

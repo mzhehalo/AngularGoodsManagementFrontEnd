@@ -1,9 +1,7 @@
-import {Component, Directive, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../user/user.service';
-import {ActivatedRoute} from '@angular/router';
-import {LoginService} from './login.service';
-import {Observable} from 'rxjs';
+import {Router} from '@angular/router';
+import {AuthService} from './auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +10,13 @@ import {Observable} from 'rxjs';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+  errorMessage = 'Invalid Credentials';
+  successMessage: string;
+  invalidLogin = false;
+  loginSuccess = false;
+  private baseUrl = 'http://localhost:8100';
 
-  constructor(private formBuilder: FormBuilder, private loginService: LoginService, private activatedRoute: ActivatedRoute) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -23,11 +26,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login(): Observable<any> {
-    return this.loginService.login({
+  authenticate(): void {
+    return this.authService.authenticate({
       firstName: this.loginForm.value.firstName,
       password: this.loginForm.value.password
+    }).subscribe((result) => {
+      this.invalidLogin = false;
+      this.loginSuccess = true;
+      this.successMessage = 'Login Successful.';
+      this.router.navigate(['', this.loginForm.value.firstName]);
+      console.log('success');
+      console.log(result);
+    }, (error) => {
+        this.invalidLogin = true;
+        this.loginSuccess = false;
+        console.log('error');
+        console.log(error);
     });
-    // this.activatedRoute.data.subscribe(value => console.log(value));
   }
 }

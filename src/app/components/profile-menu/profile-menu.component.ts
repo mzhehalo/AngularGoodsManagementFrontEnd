@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from '../login/auth.service';
+import {UserModel} from '../../model/UserModel';
 
 @Component({
   selector: 'app-profile-menu',
@@ -6,11 +8,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./profile-menu.component.css']
 })
 export class ProfileMenuComponent implements OnInit {
-  user: any = 'Michael';
-  routerName: any = 'name';
+  user: string;
 
-  constructor() { }
-  ngOnInit(): void {
+  constructor(private authService: AuthService) {
   }
 
+  ngOnInit(): void {
+    // this.authService.loggedInEmitterUserFirstName.subscribe((data: string) => this.user = data);
+    this.user = this.authService.getFirstNameFromSessionStorage();
+
+
+    // if (this.authService.isUserLoggedIn()) {
+    //   this.authService.loggedInEmitterUserFirstName.emit(sessionStorage.getItem('FirstName'));
+    // }
+  }
 }

@@ -1,7 +1,9 @@
 <div class="d-flex justify-content-center align-content-center mt-4">
-  <div class="border">
+  <div class="list-group-item p-0">
     <p class="d-flex justify-content-center mt-3 font-weight-bold">Login</p>
     <form class="p-5 border-top" [formGroup]="loginForm">
+      <div class="alert alert-warning" *ngIf='invalidLogin'>{{errorMessage}}</div>
+      <div class="alert alert-success" *ngIf='loginSuccess'>{{successMessage}}</div>
       <div>
         <div>
           <div class="mt-3">Your firstName:</div>
@@ -17,7 +19,7 @@
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-end">
-        <button (click)="login()" routerLink="main">Login</button>
+        <button class="btn btn-primary" (click)="authenticate()">Login</button>
       </div>
     </form>
   </div>

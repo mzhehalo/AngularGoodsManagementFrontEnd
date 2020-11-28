@@ -1,17 +1,12 @@
 <div class="d-flex justify-content-center align-content-center mt-3 mb-5">
-  <div class="border">
-    <p class="d-flex justify-content-center mt-3 font-weight-bold">Editing of {{user}}</p>
+  <div class="list-group-item p-0">
+    <p class="d-flex justify-content-center mt-3 font-weight-bold">Editing of {{user.firstName + " " + user.lastName}}</p>
     <form class="p-5 border-top" [formGroup]="editUserForm">
       <div>
         <div>
-          <div class="mt-1">Login:</div>
-          <input class="mt-1"
-                 formControlName="login">
-        </div>
-        <div>
           <div class="mt-3">First name:</div>
           <input class="mt-1"
-                 formControlName="name">
+                 formControlName="firstName">
         </div>
 
         <div>
@@ -36,7 +31,7 @@
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-end">
-        <button (click)="editUser()">Edit</button>
+        <button class="btn btn-primary" (click)="editUser()">Edit</button>
       </div>
     </form>
   </div>

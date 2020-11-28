@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center align-content-center mt-3 mb-5" xmlns="http://www.w3.org/1999/html">
+  <div class="list-group-item p-0">
+    <p class="d-flex justify-content-center mt-3 font-weight-bold">Add Product</p>
+    <form class="p-5 border-top" [formGroup]="addProductForm">
+      <div>
+        <div>
+          <div class="mt-3">Product name:</div>
+          <input class="mt-1"
+                 formControlName="productName"
+                 placeholder="product name" appMyAutoFocusDirective>
+        </div>
+        <div>
+          <div class="mt-3">Product Description:</div>
+          <input class="mt-1"
+                 formControlName="productDescription"
+                 placeholder="product description">
+        </div>
+        <div>
+          <div class="mt-3">Product Brand:</div>
+          <input class="mt-1"
+                 formControlName="productBrand"
+                 placeholder="product brand">
+        </div>
+        <div>
+          <div class="mt-3">Price:</div>
+          <input class="mt-1"
+                 formControlName="productPrice"
+                 placeholder="price">
+        </div>
+
+      </div>
+      <div class="mt-3 d-flex justify-content-end ">
+        <div>
+          <button class="btn btn-primary" (click)="uploadImage()">Upload Image</button>
+        </div>
+      </div>
+      <div class="mt-3 d-flex justify-content-end">
+        <button class="btn btn-primary" (click)="addProduct()">Add</button>
+      </div>
+    </form>
+  </div>
+</div>

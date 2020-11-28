@@ -1,5 +1,5 @@
-<div class="d-flex justify-content-center align-content-center mt-3 mb-5">
-  <div class="border">
+<div class="d-flex justify-content-center align-content-center mt-3 mb-5" xmlns="http://www.w3.org/1999/html">
+  <div class="list-group-item p-0">
     <p class="d-flex justify-content-center mt-3 font-weight-bold">Registration</p>
     <form class="p-5 border-top" [formGroup]="registerForm">
       <div>
@@ -33,9 +33,30 @@
                  formControlName="password2"
                  placeholder="password">
         </div>
+
+        <div>
+          <div class="mt-3">Choose your role:</div>
+          <label class="mt-2">
+            <input
+              type="radio"
+              value="ROLE_CUSTOMER"
+              class="mt-1"
+              formControlName="role">
+            <span> Customer</span>
+          </label>
+
+          <label class="ml-2 mt-2">
+            <input
+              type="radio"
+              value="ROLE_SELLER"
+              class="mt-1"
+              formControlName="role">
+            <span> Seller</span>
+          </label>
+        </div>
       </div>
       <div class="mt-3 d-flex justify-content-end">
-        <button (click)="registerUser()">Register</button>
+        <button class="btn btn-primary" (click)="registerUser()">Register</button>
       </div>
     </form>
   </div>

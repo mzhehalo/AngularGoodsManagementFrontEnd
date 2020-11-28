@@ -2,27 +2,37 @@
   <div class="d-flex justify-content-start">
     <span *ngIf="isLoggedIn; then logined else preLogined"></span>
     <ng-template #logined>
-      <a class="text-decoration-none text-white" routerLink="{{routerName}}/main"><h3>GoodsManagement1.0</h3></a>
+      <a class="text-decoration-none text-white" (click)="routerMainPage()"><h3>GoodsManagement1.0</h3></a>
     </ng-template>
     <ng-template #preLogined>
       <a class="text-decoration-none text-white" routerLink="/login"><h3>GoodsManagement1.0</h3></a>
     </ng-template>
+    <div class="ml-1 bg-success align-self-end rounded pl-1 pr-1 " *ngIf="role === 'ROLE_CUSTOMER'">Customer</div>
+    <div class="ml-1 bg-deepskyblue align-self-end rounded pl-1 pr-1" *ngIf="role === 'ROLE_SELLER'">Seller</div>
   </div>
   <ul class="list-unstyled d-flex align-content-center p-0 m-0 d-flex justify-content-end">
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light"
-         routerLink="{{routerName}}/main">Main Page</a>
+         *ngIf="user" (click)="routerMainPage()">Main Page</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light" routerLink="login" >Login</a>
+      <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
+      <a class="nav-item nav-link text-decoration-none text-light" (click)="routerEditProduct()">Add Product</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
+      <a class="nav-item nav-link text-decoration-none text-light" >Wishlist(quantity)</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="isLoggedIn">
+      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[user + '/logout']"
+         (click)="handleLogout()">Logout</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">
       <app-profile-menu></app-profile-menu>
     </li>
   </ul>
 </nav>
-<button (click)="change()">Change!</button>
-
