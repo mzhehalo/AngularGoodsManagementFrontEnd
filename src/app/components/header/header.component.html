@@ -12,23 +12,23 @@
   </div>
   <ul class="list-unstyled d-flex align-content-center p-0 m-0 d-flex justify-content-end">
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         *ngIf="user" (click)="routerMainPage()">Main Page</a>
+      <a class="nav-item nav-link text-decoration-none text-light btn"
+         *ngIf="firstName" (click)="routerMainPage()">Main Page</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
-      <a class="nav-item nav-link text-decoration-none text-light" (click)="routerEditProduct()">Add Product</a>
+      <a class="nav-item nav-link text-decoration-none text-light btn" (click)="routerEditProduct()">Add Product</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
-      <a class="nav-item nav-link text-decoration-none text-light" >Wishlist(quantity)</a>
+      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[firstName + '/wishlist']">Wishlist({{wishlistQuantity}})</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[user + '/logout']"
+      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[firstName + '/logout']"
          (click)="handleLogout()">Logout</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">

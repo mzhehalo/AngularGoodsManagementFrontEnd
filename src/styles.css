@@ -11,25 +11,11 @@
 Style of Wishlist
 */
 
-/*input[type=checkbox] {*/
-/*  width: 18px;*/
-/*  visibility:hidden;*/
-/*}*/
+.like {
+  background-color: unset;
+}
 
-/*input[type=checkbox]::before {*/
-/*  visibility: visible;*/
-/*  font-size:16px;*/
-/*  display: inline-block;*/
-/*  letter-spacing: 5px;*/
-/*  content: "\f004";*/
-/*  color: red;*/
+.fa-heart{
+  color: red;
+}
 
-/*  font-family: 'Font Awesome 5 Free';*/
-/*}*/
-
-/*input[type=checkbox]:checked::before {*/
-/*  content: "\f004";*/
-/*  letter-spacing: 5px;*/
-/*  color: #007bff;*/
-/*  font-family: 'Font Awesome 5 Free';*/
-/*}*/

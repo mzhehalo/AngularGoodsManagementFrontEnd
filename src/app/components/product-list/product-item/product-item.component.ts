@@ -33,7 +33,9 @@ export class ProductItemComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(this.product);
-    this.authService.getUserDetails().subscribe(data => this.role = data.role);
+    this.authService.getUserDetails().subscribe(data => {
+      this.role = data.role;
+    });
   }
 
   deleteProduct(): void {
@@ -53,12 +55,12 @@ export class ProductItemComponent implements OnInit {
   // }
 
   addToWishlist(): void {
-    this.wishlistService.addToWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.addLikeToWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
     this.wishListBoolean = !this.wishListBoolean;
   }
 
   deleteFromWishlist(): void {
-    this.wishlistService.deleteFromWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.deleteLikeFromWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
     this.wishListBoolean = !this.wishListBoolean;
   }
 }

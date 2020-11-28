@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {ProductModel} from '../../model/ProductModel';
+import {WishlistService} from '../wishlist/wishlist.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,10 @@ export class AuthService {
   @Output() loggedInEmitterUserFirstName: EventEmitter<string> = new EventEmitter();
   @Output() loggedInEmitterUserRole: EventEmitter<string> = new EventEmitter();
 
-  constructor(private httpClient: HttpClient, private http: HttpClient, private route: Router) {
+  constructor(private httpClient: HttpClient,
+              private http: HttpClient,
+              private route: Router,
+              private wishlistService: WishlistService) {
   }
 
   authenticate(authenticationModel: UserModel): any {

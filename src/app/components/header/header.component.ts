@@ -1,6 +1,7 @@
-import { Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../login/auth.service';
 import {Router} from '@angular/router';
+import {WishlistService} from '../wishlist/wishlist.service';
 
 @Component({
   selector: 'app-header',
@@ -8,24 +9,28 @@ import {Router} from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  user: string;
+  firstName: string;
   isLoggedIn: any;
   role: string;
   wishlistQuantity: number;
 
-  constructor(private authService: AuthService, private router: Router,) {
+  constructor(private authService: AuthService,
+              private router: Router,
+              private wishlistService: WishlistService
+  ) {
     console.log('HEADER constructor');
   }
 
-
   ngOnInit(): void {
-    this.user = this.authService.getFirstNameFromSessionStorage();
-    console.log(this.user);
-    // this.user = sessionStorage.getItem('FirstName');
+    this.wishlistService.wishlistArrLengthEmitter.subscribe(wishlistQuantityEm => {
+      this.wishlistQuantity = wishlistQuantityEm;
+      console.log('AAAAAAAAAAAAA' + this.wishlistQuantity);
+    });
+    this.firstName = this.authService.getFirstNameFromSessionStorage();
+    console.log(this.firstName);
     this.role = sessionStorage.getItem('ROLE');
-    this.authService.loggedInEmitterUserFirstName.subscribe(data => this.user = data);
+    this.authService.loggedInEmitterUserFirstName.subscribe(data => this.firstName = data);
     this.authService.loggedInEmitterUserRole.subscribe(data => this.role = data);
-    // this.authService.loggedInEmitterUserFirstName.subscribe((data: string) => this.user = data);
     this.authService.loggedInEmitter.subscribe((data: boolean) => this.isLoggedIn = data);
 
     if (this.authService.isUserLoggedIn()) {
@@ -39,12 +44,12 @@ export class HeaderComponent implements OnInit {
   }
 
   routerMainPage(): void {
-    this.user = this.authService.getFirstNameFromSessionStorage();
-    this.router.navigateByUrl(this.user);
+    this.firstName = this.authService.getFirstNameFromSessionStorage();
+    this.router.navigateByUrl(this.firstName);
   }
 
   routerEditProduct(): void {
-    this.user = this.authService.getFirstNameFromSessionStorage();
-    this.router.navigateByUrl(this.user + '/add-product');
+    this.firstName = this.authService.getFirstNameFromSessionStorage();
+    this.router.navigateByUrl(this.firstName + '/add-product');
   }
 }
