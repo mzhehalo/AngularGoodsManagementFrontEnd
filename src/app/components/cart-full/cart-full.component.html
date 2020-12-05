@@ -1,0 +1,12 @@
+<div>
+  <h3 class="text-center mt-4 mb-5">Cart</h3>
+  <div class="d-flex">
+    <div class="w-50 justify-content-start">
+      <app-cart></app-cart>
+    </div>
+    <div class="w-50 justify-content-end">
+      <h5 class="text-center">Your information:</h5>
+    </div>
+  </div>
+  <button *ngIf="cartQuantity" class="btn btn-outline-primary m-4 ">Order</button>
+</div>

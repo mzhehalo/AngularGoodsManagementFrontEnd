@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../login/auth.service';
 import {Router} from '@angular/router';
 import {WishlistService} from '../wishlist/wishlist.service';
+import {CartService} from '../cart/cart.service';
 
 @Component({
   selector: 'app-header',
@@ -13,18 +14,23 @@ export class HeaderComponent implements OnInit {
   isLoggedIn: any;
   role: string;
   wishlistQuantity: number;
+  cartQuantity: number;
+  orders: number;
 
   constructor(private authService: AuthService,
               private router: Router,
-              private wishlistService: WishlistService
+              private wishlistService: WishlistService,
+              private cartService: CartService
   ) {
     console.log('HEADER constructor');
   }
 
   ngOnInit(): void {
+    this.cartService.cartQuantityEmitter.subscribe(cartQuantityEm => {
+      this.cartQuantity = cartQuantityEm;
+    });
     this.wishlistService.wishlistArrLengthEmitter.subscribe(wishlistQuantityEm => {
       this.wishlistQuantity = wishlistQuantityEm;
-      console.log('AAAAAAAAAAAAA' + this.wishlistQuantity);
     });
     this.firstName = this.authService.getFirstNameFromSessionStorage();
     console.log(this.firstName);

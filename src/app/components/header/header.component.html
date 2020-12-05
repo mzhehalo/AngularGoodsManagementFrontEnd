@@ -19,10 +19,18 @@
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
+      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[firstName + '/orders']">Orders({{orders || 0}})</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
       <a class="nav-item nav-link text-decoration-none text-light btn" (click)="routerEditProduct()">Add Product</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
-      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[firstName + '/wishlist']">Wishlist({{wishlistQuantity}})</a>
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/wishlist']">Wishlist({{wishlistQuantity || 0}})</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/cart']">Cart({{cartQuantity || 0}})</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>

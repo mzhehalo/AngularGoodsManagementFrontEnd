@@ -5,7 +5,7 @@
   <div class="col-md-8">
     <app-product-list [ProductsFromDataBase]="ProductsFromDataBase"></app-product-list>
   </div>
-  <div class="col">
-    <app-cart [ProductsFromDataBase]="ProductsFromDataBase"></app-cart>
+  <div *ngIf="role !== 'ROLE_SELLER'" class="col">
+    <app-cart></app-cart>
   </div>
 </div>

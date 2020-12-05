@@ -21,5 +21,4 @@ export class WishlistComponent implements OnInit {
       console.log('wishlistProducts' + this.likedProductsFromDataBase);
     });
   }
-
 }

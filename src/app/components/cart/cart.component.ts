@@ -1,8 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {UsersService} from './users.service';
-import {UserModel} from '../../model/UserModel';
-import {ActivatedRoute} from '@angular/router';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProductModel} from '../../model/ProductModel';
+import {MessengerService} from '../product-list/messenger.service';
+import {CartService} from './cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -10,13 +9,30 @@ import {ProductModel} from '../../model/ProductModel';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  @Input()
-  ProductsFromDataBase: ProductModel[];
 
+  cartItems = [];
+  cartTotal = 0;
 
-  constructor() {
+  constructor(private messengerService: MessengerService, private cartService: CartService) {
   }
 
   ngOnInit(): void {
+    console.log('sum:----' + this.cartItems);
+    this.getAllCartProducts();
+    this.messengerService.getMessage().subscribe(trigger => {
+      this.getAllCartProducts();
+    });
+  }
+
+  getAllCartProducts(): void {
+    this.cartService.getCartProducts(Number(sessionStorage.getItem('ID'))).subscribe(value => {
+      console.log(value);
+      this.cartItems = value;
+      this.cartService.cartQuantityEmitter.emit(this.cartItems.length);
+      this.cartTotal = 0;
+      this.cartItems.forEach((item => {
+        this.cartTotal += (item.quantity * item.product.productPrice);
+      }));
+    });
   }
 }

@@ -1,7 +1,23 @@
-<!--<p>cart-item works!</p>-->
 <div class="cart-item">
-  <span>{{product.productName}}</span>: <strong>{{product.productPrice | currency}}</strong>
-</div>
-<!--<p>Name: {{product.productName}}</p>-->
-<!--<p>Brand :{{product.productBrand}}</p>-->
+    <span>ID: {{cartItem.product.id}} </span>
+    <span>Name:{{cartItem.product.productName}}</span>
+    x
+    <span>{{cartItem.quantity}}</span>:
+    <strong>{{(cartItem.quantity * cartItem.product.productPrice) | currency}}</strong>
 
+  <div class="float-right">
+    <button type="button" class="btn btn-sm btn-outline-primary mr-2"
+            [routerLink]="'full-product/' + cartItem.product.id"
+            *ngIf="role === 'ROLE_CUSTOMER' && currentUrl.includes('/cart')"
+    >
+      View
+    </button>
+    <button type="button"
+            class="btn btn-sm btn-outline-primary ui-state-hover"
+            *ngIf="role === 'ROLE_CUSTOMER' && currentUrl.includes('/cart')"
+            (click)="deleteFromCart()">
+      Delete From Cart
+    </button>
+  </div>
+
+</div>

@@ -8,6 +8,8 @@ import {stringify} from '@angular/compiler/src/util';
 import {ProductListComponent} from '../product-list.component';
 import {WishlistService} from '../../wishlist/wishlist.service';
 import {toNumbers} from '@angular/compiler-cli/src/diagnostics/typescript_version';
+import {MessengerService} from '../messenger.service';
+import {CartService} from '../../cart/cart.service';
 
 @Component({
   selector: 'app-product-item',
@@ -18,7 +20,6 @@ export class ProductItemComponent implements OnInit {
   @Input()
   product: ProductModel;
   role: string;
-  firstNameFromStorage: string;
   @Input()
   wishListBoolean: boolean;
 
@@ -27,9 +28,9 @@ export class ProductItemComponent implements OnInit {
               private productService: ProductService,
               private router: Router,
               private productList: ProductListComponent,
-              private wishlistService: WishlistService
-  ) {
-  }
+              private wishlistService: WishlistService,
+              private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     console.log(this.product);
@@ -38,21 +39,14 @@ export class ProductItemComponent implements OnInit {
     });
   }
 
-  deleteProduct(): void {
-    this.productList.deleteProductById(this.product.id);
-    // this.firstNameFromStorage = sessionStorage.getItem('FirstName');
-    // console.log('Delete');
-    this.productService.deleteProduct(this.product.id).subscribe(value => {
-      // this.router.navigateByUrl('/' + stringify(this.product.id));
-      console.log(value);
-      // this.ngOnInit();
-    });
+  addToCart(): void {
+    this.cartService.addToCart(Number(sessionStorage.getItem('ID')), this.product.id);
   }
 
-  // change(): void {
-  //   console.log(this.wishListBoolean);
-  //   this.wishListBoolean = !this.wishListBoolean;
-  // }
+  deleteProduct(): void {
+    this.productList.deleteProductById(this.product.id);
+    this.productService.deleteProduct(this.product.id);
+  }
 
   addToWishlist(): void {
     this.wishlistService.addLikeToWishlist(this.product.id, Number(sessionStorage.getItem('ID')));

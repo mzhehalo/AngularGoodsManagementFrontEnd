@@ -1,6 +1,8 @@
-<ul class="list-group">
-  <li class="list-group-item" *ngFor="let product of ProductsFromDataBase">
-    <app-cart-item  [product]="product"></app-cart-item>
+<div *ngIf="!cartItems.length" class="alert alert-info">Your cart is Empty</div>
+
+<ul *ngIf="cartItems.length" class="list-group">
+  <li class="list-group-item" *ngFor="let cartItem of cartItems">
+    <app-cart-item  [cartItem]="cartItem"></app-cart-item>
   </li>
-  <li class="list-group-item active">Total: {{23 | currency}}</li>
+  <li class="list-group-item active">Total: {{cartTotal | currency}}</li>
 </ul>

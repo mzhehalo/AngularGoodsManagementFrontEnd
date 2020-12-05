@@ -17,23 +17,23 @@ export class WishlistService {
   @Output() wishlistArrLengthEmitter: EventEmitter<number> = new EventEmitter();
   @Output() wishlistItemEmitter: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   getAllProductsWishlist(): Observable<ProductModel[]> {
     const userId = sessionStorage.getItem('ID');
-    return this.httpClient.get<ProductModel[]>(this.baseUrl + '/get-products/' + userId);
+    return this.http.get<ProductModel[]>(this.baseUrl + '/get-products/' + userId);
   }
 
   getLikesWishList(): Observable<number[]> {
     const userId = sessionStorage.getItem('ID');
-    return this.httpClient.get<number[]>(this.baseUrl + '/get-likes/' + userId);
+    return this.http.get<number[]>(this.baseUrl + '/get-likes/' + userId);
   }
 
-  addLikeToWishlist(productId: number, customerId: number): Subscription {
-    console.log('productId:' + productId + 'userId:' + customerId);
+  addLikeToWishlist(productId: number, userId: number): Subscription {
+    console.log('productId:' + productId + 'userId:' + userId);
     console.log('sentsentsentsentsentsentsentsentsentsentsentsentsent');
-    return this.httpClient.post<UserModel>(this.baseUrl + '/add', {productId, customerId}).subscribe(
+    return this.http.post<UserModel>(this.baseUrl + '/add', {productId, userId}).subscribe(
       value => {
         console.log(value);
         this.getLikesWishList().subscribe(data => {
@@ -47,7 +47,7 @@ export class WishlistService {
 
   deleteLikeFromWishlist(productId: number, customerId: number): void {
     console.log('delete id:' + productId);
-    this.httpClient.delete<UserModel>(this.baseUrl + '/delete/' + customerId + '/' + productId).subscribe(
+    this.http.delete<UserModel>(this.baseUrl + '/delete/' + customerId + '/' + productId).subscribe(
       value => {
         console.log(value);
         this.getLikesWishList().subscribe(data => {

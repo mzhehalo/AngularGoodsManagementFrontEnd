@@ -8,14 +8,12 @@ import {MainComponent} from './components/main/main.component';
 import {LoginComponent} from './components/login/login.component';
 import {RegisterComponent} from './components/register/register.component';
 import {ReactiveFormsModule} from '@angular/forms';
-import {UserComponent} from './components/user/user.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthGuard} from './guards/auth.guard';
 import {ProfileMenuComponent} from './components/profile-menu/profile-menu.component';
 import {EditUserComponent} from './components/edit-user/edit-user.component';
 import {HeaderComponent} from './components/header/header.component';
 import {MyAutoFocusDirective} from './directive/my-auto-focus.directive';
-import {User2Component} from './components/user2/user2.component';
 import {HttpInterceptorService} from './httpInterceptor.service';
 import {LogoutComponent} from './components/logout/logout.component';
 import {AddProductComponent} from './components/add-product/add-product.component';
@@ -29,6 +27,8 @@ import {ProductItemFullComponent} from './components/product-list/product-item/p
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {EditProductComponent} from './components/edit-product/edit-product.component';
 import {WishlistComponent} from './components/wishlist/wishlist.component';
+import { WrapperComponent } from './components/wrapper/wrapper.component';
+import { CartFullComponent } from './components/cart-full/cart-full.component';
 
 @NgModule({
   declarations: [
@@ -36,8 +36,6 @@ import {WishlistComponent} from './components/wishlist/wishlist.component';
     MainComponent,
     LoginComponent,
     RegisterComponent,
-    UserComponent,
-    User2Component,
     ProfileMenuComponent,
     EditUserComponent,
     HeaderComponent,
@@ -52,7 +50,9 @@ import {WishlistComponent} from './components/wishlist/wishlist.component';
     ProductItemComponent,
     ProductItemFullComponent,
     EditProductComponent,
-    WishlistComponent
+    WishlistComponent,
+    WrapperComponent,
+    CartFullComponent
   ],
   imports: [
     BrowserModule,
