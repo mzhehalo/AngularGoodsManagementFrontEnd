@@ -1,5 +1,20 @@
 <div class="row">
-  <div class="col-md-4" *ngFor="let product of ProductsFromDataBase">
+  <div class="col-md-4" *ngFor="let product of productsFromDataBase | paginate: config">
     <app-product-item [product]="product" [wishListBoolean]="wishlist.indexOf(product.id) >= 0"></app-product-item>
+  </div>
+</div>
+<div *ngIf="productsFromDataBase.length !== 0" class="d-flex justify-content-center">
+
+  <div>
+    <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
+  </div>
+  <div class="ml-2">
+        <label>
+          <select (change)="pageSizeChange($event)">
+            <option *ngFor="let size of pageSizes" [ngValue]="size" [selected]="size == 6">
+              {{ size }}
+            </option>
+          </select>
+        </label>
   </div>
 </div>

@@ -24,6 +24,7 @@ const routes: Routes = [
     {
       path: ':firstName', children: [
         {path: '', component: MainComponent, resolve: {Products: ProductsResolverService}},
+        // {path: '', component: MainComponent},
         {
           path: 'full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
@@ -36,9 +37,15 @@ const routes: Routes = [
             WishlistArr: WishlistResolverService
           }
         },
+        {
+          path: 'wishlist/full-product/:id', component: ProductItemFullComponent, resolve: {
+            Product: ProductResolverService,
+            WishlistArr: WishlistResolverService
+          }
+        },
         {path: 'profile', component: ProfileMenuComponent},
         {path: 'edit-user', component: EditUserComponent, resolve: {User: UserResolverService}},
-        {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product: ProductResolverService}},
+        {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product:  ProductResolverService}},
         {
           path: 'full-product/:id/edit-product', component: EditProductComponent,
           resolve: {Product: ProductResolverService},

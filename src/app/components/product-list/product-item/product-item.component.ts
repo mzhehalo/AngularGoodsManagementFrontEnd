@@ -10,6 +10,7 @@ import {WishlistService} from '../../wishlist/wishlist.service';
 import {toNumbers} from '@angular/compiler-cli/src/diagnostics/typescript_version';
 import {MessengerService} from '../messenger.service';
 import {CartService} from '../../cart/cart.service';
+import {logger} from 'codelyzer/util/logger';
 
 @Component({
   selector: 'app-product-item',
@@ -45,7 +46,10 @@ export class ProductItemComponent implements OnInit {
 
   deleteProduct(): void {
     this.productList.deleteProductById(this.product.id);
-    this.productService.deleteProduct(this.product.id);
+    console.log('deleteProductById(this.product.id)' + this.product.id);
+    this.productService.deleteProduct(this.product.id).subscribe(value => {
+      console.log(value);
+    }, error => console.log(error));
   }
 
   addToWishlist(): void {

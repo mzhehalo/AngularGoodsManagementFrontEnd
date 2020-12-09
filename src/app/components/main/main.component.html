@@ -3,7 +3,8 @@
     <app-filters></app-filters>
   </div>
   <div class="col-md-8">
-    <app-product-list [ProductsFromDataBase]="ProductsFromDataBase"></app-product-list>
+    <app-product-list></app-product-list>
+<!--    <app-pagination></app-pagination>-->
   </div>
   <div *ngIf="role !== 'ROLE_SELLER'" class="col">
     <app-cart></app-cart>

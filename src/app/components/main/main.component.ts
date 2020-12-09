@@ -11,19 +11,15 @@ import {AuthService} from '../login/auth.service';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  ProductsFromDataBase: ProductModel[];
   role: string;
 
-  constructor(private activatedRoute: ActivatedRoute,
-              private authService: AuthService) {
-    this.ProductsFromDataBase = this.activatedRoute.snapshot.data.Products;
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.authService.getUserDetails().subscribe(data => {
       this.role = data.role;
     });
-    console.log(this.ProductsFromDataBase);
   }
 
 }

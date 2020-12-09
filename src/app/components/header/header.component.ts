@@ -51,7 +51,11 @@ export class HeaderComponent implements OnInit {
 
   routerMainPage(): void {
     this.firstName = this.authService.getFirstNameFromSessionStorage();
-    this.router.navigateByUrl(this.firstName);
+    if (this.router.url === '/' + this.firstName) {
+      window.location.reload();
+    } else {
+      this.router.navigateByUrl(this.firstName);
+    }
   }
 
   routerEditProduct(): void {

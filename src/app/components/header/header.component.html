@@ -19,9 +19,6 @@
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
-      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[firstName + '/orders']">Orders({{orders || 0}})</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
       <a class="nav-item nav-link text-decoration-none text-light btn" (click)="routerEditProduct()">Add Product</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">

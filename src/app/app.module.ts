@@ -29,6 +29,8 @@ import {EditProductComponent} from './components/edit-product/edit-product.compo
 import {WishlistComponent} from './components/wishlist/wishlist.component';
 import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { CartFullComponent } from './components/cart-full/cart-full.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
   declarations: [
@@ -52,16 +54,18 @@ import { CartFullComponent } from './components/cart-full/cart-full.component';
     EditProductComponent,
     WishlistComponent,
     WrapperComponent,
-    CartFullComponent
+    CartFullComponent,
+    PaginationComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    NgbModule,
-    ReactiveFormsModule,
-    HttpClientModule,
-    FontAwesomeModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        NgbModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        FontAwesomeModule,
+        NgxPaginationModule
+    ],
   providers: [AuthGuard, LoginComponent, ProductListComponent, {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpInterceptorService,
