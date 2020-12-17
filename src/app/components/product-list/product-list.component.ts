@@ -2,8 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProductModel} from '../../model/ProductModel';
 import {ProductService} from './product.service';
 import {WishlistService} from '../wishlist/wishlist.service';
-import {Observable} from 'rxjs';
-import {ActivatedRoute, Data} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
@@ -17,17 +16,22 @@ export class ProductListComponent implements OnInit {
   config: any;
   pageSizes: number[] = [3, 6, 9, 18];
   pageSize: number;
+  totalItems: number;
 
   constructor(private wishlistService: WishlistService,
               private activatedRoute: ActivatedRoute,
-              private productService: ProductService
+              private productService: ProductService,
+              private router: Router
   ) {
-    this.productsFromDataBase = this.activatedRoute.snapshot.data.Products.productList;
+    if (!router.url.includes('/wishlist')) {
+      this.productsFromDataBase = this.activatedRoute.snapshot.data.Products.productList;
+      this.totalItems = this.activatedRoute.snapshot.data.Products.totalElements;
+    }
 
     this.config = {
       itemsPerPage: 6,
       currentPage: 0,
-      totalItems: this.activatedRoute.snapshot.data.Products.totalElements
+      totalItems: this.totalItems
     };
   }
 

@@ -29,7 +29,6 @@ import {EditProductComponent} from './components/edit-product/edit-product.compo
 import {WishlistComponent} from './components/wishlist/wishlist.component';
 import { WrapperComponent } from './components/wrapper/wrapper.component';
 import { CartFullComponent } from './components/cart-full/cart-full.component';
-import { PaginationComponent } from './components/pagination/pagination.component';
 import {NgxPaginationModule} from 'ngx-pagination';
 
 @NgModule({
@@ -55,7 +54,6 @@ import {NgxPaginationModule} from 'ngx-pagination';
     WishlistComponent,
     WrapperComponent,
     CartFullComponent,
-    PaginationComponent
   ],
     imports: [
         BrowserModule,

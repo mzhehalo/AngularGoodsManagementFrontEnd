@@ -28,7 +28,8 @@
         <!--        <div class="btn-outline-primary btn btn-sm like"  *ngIf="role === 'ROLE_CUSTOMER'"><input class="far fa-heart" type="checkbox" checked></div>-->
         <div class="btn-outline-primary btn btn-sm like" *ngIf="role === 'ROLE_CUSTOMER'">
           <i *ngIf="wishListBoolean" class="fas fa-heart" (click)="deleteFromWishlist()"></i>
-          <i *ngIf="!wishListBoolean" class="far fa-heart" (click)="addToWishlist()"></i></div>
+          <i *ngIf="!wishListBoolean" class="far fa-heart" (click)="addToWishlist()"></i>
+        </div>
       </div>
       <strong class="text-muted">{{product.productPrice | currency}}</strong>
     </div>

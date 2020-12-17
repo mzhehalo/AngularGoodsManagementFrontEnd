@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ProductModel} from '../../model/ProductModel';
 import {MessengerService} from '../product-list/messenger.service';
 import {CartService} from './cart.service';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -9,7 +10,6 @@ import {CartService} from './cart.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-
   cartItems = [];
   cartTotal = 0;
 

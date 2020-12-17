@@ -11,6 +11,7 @@ import {MessengerService} from '../product-list/messenger.service';
 export class CartService {
   private baseUrl = 'http://localhost:8100/cart';
   @Output() cartQuantityEmitter: EventEmitter<number> = new EventEmitter();
+  cartItemEmptiness: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private http: HttpClient,
               private message: MessengerService
