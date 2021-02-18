@@ -16,6 +16,12 @@ import {EditProductComponent} from './components/edit-product/edit-product.compo
 import {WishlistResolverService} from './service-resolvers/wishlist-resolver.service';
 import {WishlistComponent} from './components/wishlist/wishlist.component';
 import {CartFullComponent} from './components/cart-full/cart-full.component';
+import {OrderComponent} from './components/order/order.component';
+import {OrdersResolverService} from './service-resolvers/orders-resolver.service';
+import {OrderItemFullComponent} from './components/order/order-list/order-item/order-item-full/order-item-full.component';
+import {OrderResolverService} from './service-resolvers/order-resolver.service';
+import {ProductsCategoryResolverService} from './service-resolvers/products-category-resolver.service';
+import {WishlistProductsResolverService} from './service-resolvers/wishlist-products-resolver.service';
 
 
 const routes: Routes = [
@@ -24,9 +30,18 @@ const routes: Routes = [
     {
       path: ':firstName', children: [
         {path: '', component: MainComponent, resolve: {Products: ProductsResolverService}},
-        // {path: '', component: MainComponent},
+        {path: 'category', children: [
+            {path: ':mainCategory/:subCategory', component: MainComponent,
+              resolve: {CategoryProducts: ProductsCategoryResolverService}},
+          ]},
         {
           path: 'full-product/:id', component: ProductItemFullComponent, resolve: {
+            Product: ProductResolverService,
+            WishlistArr: WishlistResolverService
+          }
+        },
+        {
+          path: 'category/:mainCategory/:subCategory/full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
             WishlistArr: WishlistResolverService
           }
@@ -45,18 +60,29 @@ const routes: Routes = [
         },
         {path: 'profile', component: ProfileMenuComponent},
         {path: 'edit-user', component: EditUserComponent, resolve: {User: UserResolverService}},
-        {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product:  ProductResolverService}},
+        {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product: ProductResolverService}},
         {
           path: 'full-product/:id/edit-product', component: EditProductComponent,
           resolve: {Product: ProductResolverService},
         },
         {path: 'logout', component: LogoutComponent},
         {path: 'add-product', component: AddProductComponent},
-        {path: 'wishlist', component: WishlistComponent},
-        {path: 'cart', component: CartFullComponent}
-      ]
+        {path: 'wishlist', component: WishlistComponent, resolve: {WishlistProducts: WishlistProductsResolverService}},
+        {path: 'cart', component: CartFullComponent},
+        {
+          path: 'orders', component: OrderComponent, resolve: {
+            Orders: OrdersResolverService
+          }
+        },
+        {
+          path: 'orders/full-order/:orderId', component: OrderItemFullComponent, resolve: {
+            Order: OrderResolverService
+          }
+        }
+      ],
     }
-  ];
+  ]
+;
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

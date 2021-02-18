@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {ProductModel} from '../../../model/ProductModel';
 import {CartModel} from '../../../model/CartModel';
 import {AuthService} from '../../login/auth.service';
 import {Router} from '@angular/router';
@@ -26,20 +25,16 @@ export class CartItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.cartItem);
     this.authService.getUserDetails().subscribe(data => {
       this.role = data.role;
     });
     this.currentUrl = this.router.url;
-    console.log(this.router);
-    console.log(this.router.url);
   }
 
   deleteFromCart(): void {
     this.cartService.deleteFromCart(Number(sessionStorage.getItem('ID')), this.cartItem.product.id)
       .subscribe(value => {
-        this.message.sendMessage();
-        console.log(value);
+        this.message.sendMessageCart();
       });
   }
 }

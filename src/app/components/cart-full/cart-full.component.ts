@@ -45,8 +45,7 @@ export class CartFullComponent implements OnInit {
       customerNumber: this.shippingInformation.value.customerNumber,
       paid: this.paymentOrderBoolean
     }).subscribe(value => {
-      console.log(value);
-      this.message.sendMessage();
+      this.message.sendMessageCart();
     });
   }
 
@@ -56,7 +55,7 @@ export class CartFullComponent implements OnInit {
 
   loadWishlist(): void {
     this.wishlistService.getLikesWishList().subscribe(wishListArr => {
-      this.wishlistService.wishlistArrLengthEmitter.emit(wishListArr.length);
+      this.wishlistService.wishlistQuantityEmitter.emit(wishListArr.length);
     });
   }
 }

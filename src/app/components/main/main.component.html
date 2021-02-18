@@ -2,11 +2,22 @@
   <div class="col">
     <app-filters></app-filters>
   </div>
-  <div class="col-md-8">
+
+  <div *ngIf="!isCategory" class="col-md-8">
     <app-product-list></app-product-list>
-<!--    <app-pagination></app-pagination>-->
   </div>
-  <div *ngIf="role !== 'ROLE_SELLER'" class="col">
+
+  <div *ngIf="isCategory" class="col-md-8">
+    <app-product-list-by-category></app-product-list-by-category>
+  </div>
+
+  <div *ngIf="role == 'ROLE_CUSTOMER'" class="col">
     <app-cart></app-cart>
+    <app-order [hidden]="true"></app-order>
+  </div>
+
+  <div *ngIf="role == 'ROLE_SELLER'" class="col">
+    <div class="alert alert-info">You have unprocessed orders:
+      <span class="font-weight-bolder">{{ordersQuantity || 0 }}</span></div>
   </div>
 </div>

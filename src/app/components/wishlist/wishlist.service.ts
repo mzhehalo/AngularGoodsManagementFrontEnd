@@ -14,7 +14,7 @@ import {ProductModel} from '../../model/ProductModel';
 export class WishlistService {
   private baseUrl = 'http://localhost:8100/wishlist';
 
-  @Output() wishlistArrLengthEmitter: EventEmitter<number> = new EventEmitter();
+  @Output() wishlistQuantityEmitter: EventEmitter<number> = new EventEmitter();
   @Output() wishlistItemEmitter: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private http: HttpClient) {
@@ -31,14 +31,10 @@ export class WishlistService {
   }
 
   addLikeToWishlist(productId: number, userId: number): Subscription {
-    console.log('productId:' + productId + 'userId:' + userId);
-    console.log('sentsentsentsentsentsentsentsentsentsentsentsentsent');
     return this.http.post<UserModel>(this.baseUrl + '/add', {productId, userId}).subscribe(
       value => {
-        console.log(value);
         this.getLikesWishList().subscribe(data => {
-          this.wishlistArrLengthEmitter.emit(data.length);
-          console.log('add---: ' + data.length);
+          this.wishlistQuantityEmitter.emit(data.length);
         });
       },
       error => console.log(error)
@@ -46,13 +42,10 @@ export class WishlistService {
   }
 
   deleteLikeFromWishlist(productId: number, customerId: number): void {
-    console.log('delete id:' + productId);
     this.http.delete<UserModel>(this.baseUrl + '/delete/' + customerId + '/' + productId).subscribe(
       value => {
-        console.log(value);
         this.getLikesWishList().subscribe(data => {
-          this.wishlistArrLengthEmitter.emit(data.length);
-          console.log('delete---: ' + data.length);
+          this.wishlistQuantityEmitter.emit(data.length);
         });
       },
       error => console.log(error)

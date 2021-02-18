@@ -10,7 +10,6 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./product-list.component.css']
 })
 export class ProductListComponent implements OnInit {
-  @Input()
   productsFromDataBase: ProductModel[];
   wishlist: number[] = [];
   config: any;
@@ -21,13 +20,13 @@ export class ProductListComponent implements OnInit {
   constructor(private wishlistService: WishlistService,
               private activatedRoute: ActivatedRoute,
               private productService: ProductService,
-              private router: Router
-  ) {
-    if (!router.url.includes('/wishlist')) {
-      this.productsFromDataBase = this.activatedRoute.snapshot.data.Products.productList;
-      this.totalItems = this.activatedRoute.snapshot.data.Products.totalElements;
-    }
+  ) {}
 
+  ngOnInit(): void {
+    this.productsFromDataBase = this.activatedRoute.snapshot.data.Products.productList;
+    this.totalItems = this.activatedRoute.snapshot.data.Products.totalElements;
+
+    this.loadWishlist();
     this.config = {
       itemsPerPage: 6,
       currentPage: 0,
@@ -35,32 +34,22 @@ export class ProductListComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
-    this.loadWishlist();
-    console.log(this.productsFromDataBase);
-  }
-
   loadProducts(currentPage: number, size: number): void {
     this.productService.getProductDetails(currentPage, size).subscribe(value => {
-      console.log(value);
       this.productsFromDataBase = value.productList;
-      console.log('arrrrrray: ' + this.productsFromDataBase);
       this.config.totalItems = value.totalElements;
       this.config.currentPage = value.number + 1;
     });
   }
 
   deleteProductById(id: number): void {
-    console.log(id);
-    console.log(this.productsFromDataBase);
     this.productsFromDataBase = this.productsFromDataBase.filter(product => product.id !== id);
   }
 
   loadWishlist(): void {
     this.wishlistService.getLikesWishList().subscribe(wishListArr => {
-      console.log(wishListArr);
       this.wishlist = wishListArr;
-      this.wishlistService.wishlistArrLengthEmitter.emit(wishListArr.length);
+      this.wishlistService.wishlistQuantityEmitter.emit(wishListArr.length);
     });
   }
 

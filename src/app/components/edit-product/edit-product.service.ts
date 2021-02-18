@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {UserModel} from '../../model/UserModel';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ProductModel} from '../../model/ProductModel';
@@ -14,7 +13,6 @@ export class EditProductService {
 
   editProduct(product: ProductModel,  id: number): Observable<ProductModel> {
     const body = {product, id};
-    console.log(body);
     return this.http.put<ProductModel>(this.baseUrl + '/product/edit', body);
   }
 }

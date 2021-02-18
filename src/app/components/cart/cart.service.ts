@@ -18,15 +18,12 @@ export class CartService {
   ) {}
 
   addToCart(userId: number, productId: number): void {
-    console.log('userId: ' + userId + 'productId: ' + productId);
     this.http.post(this.baseUrl + '/add', {userId, productId}).subscribe(value => {
-      this.message.sendMessage();
-      console.log(value);
+      this.message.sendMessageCart();
     });
   }
 
   getCartProducts(userId: number): Observable<CartModel[]>{
-    console.log('getCartProducts///////////' + userId);
     return this.http.get<CartModel[]>(this.baseUrl + '/get/' + userId);
   }
 

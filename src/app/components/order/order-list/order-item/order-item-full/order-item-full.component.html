@@ -1,0 +1,31 @@
+<div class="container">
+
+  <h3 class="text-center m-3">Order ID: {{order.id}}</h3>
+
+  <h5 class="m-3">Delivery Info: </h5>
+
+  <div>
+    <ul class="list-group">
+      <li class="list-group-item"><span class="font-weight-bold">Created: </span>{{order.created}}</li>
+      <li class="list-group-item"><span class="font-weight-bold">Country: </span>{{order.customerCountry}}</li>
+      <li class="list-group-item"><span class="font-weight-bold">Address: </span>{{order.customerAddress}}</li>
+      <li class="list-group-item"><span class="font-weight-bold">Customer name: </span>{{order.customerName}}</li>
+      <li class="list-group-item"><span class="font-weight-bold">Customer number: </span>{{order.customerNumber}}</li>
+      <li class="list-group-item"><span class="font-weight-bold">Is paid: </span>{{order.paid}}</li>
+    </ul>
+  </div>
+
+  <h5 class="m-3">Products: </h5>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="row">
+        <ul class="col-md-4" *ngFor="let cartProduct of order.cartProductListOrder">
+          <li class="list-group-item"><span class="font-weight-bold m-1">Quantity: </span> {{cartProduct.quantity}}</li>
+          <app-product-item class="list-group-item" [product]="cartProduct.product"></app-product-item>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+

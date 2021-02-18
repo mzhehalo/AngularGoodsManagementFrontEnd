@@ -3,9 +3,10 @@ import {UserModel} from '../../model/UserModel';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {ProductModel} from '../../model/ProductModel';
 import {WishlistService} from '../wishlist/wishlist.service';
+import {OrderService} from '../order/order.service';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class AuthService {
   constructor(private httpClient: HttpClient,
               private http: HttpClient,
               private route: Router,
-              private wishlistService: WishlistService) {
+  ) {
   }
 
   authenticate(authenticationModel: UserModel): any {
@@ -54,9 +55,9 @@ export class AuthService {
 
   setUserToSessionStorage(): void {
     this.getUserDetails().subscribe(data => {
-      sessionStorage.setItem(this.USER_NAME_SESSION_ID, String(data.id)),
-        sessionStorage.setItem(this.USER_NAME_SESSION_ROLE, data.role),
-        this.loggedInEmitterUserRole.emit(data.role);
+      sessionStorage.setItem(this.USER_NAME_SESSION_ID, String(data.id));
+      sessionStorage.setItem(this.USER_NAME_SESSION_ROLE, data.role);
+      this.loggedInEmitterUserRole.emit(data.role);
     });
   }
 
@@ -74,7 +75,6 @@ export class AuthService {
 
   isUserLoggedIn(): boolean {
     const user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-    console.log(user != null);
     return user !== null;
   }
 
@@ -89,10 +89,4 @@ export class AuthService {
   getUserDetails(): Observable<UserModel> {
     return this.http.post<UserModel>(this.baseUrl + '/user/get', sessionStorage.getItem(this.USER_NAME_SESSION_FIRST_NAME));
   }
-
-  // authent(): Observable<any> {
-  //   const headers = new HttpHeaders({ Authorization: 'Basic ' +
-  //       btoa('username:username') });
-  //   return this.httpClient.get<UserModel>(this.baseUrl + '/login', {headers});
-  // }
 }

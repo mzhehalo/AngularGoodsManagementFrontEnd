@@ -27,9 +27,6 @@ export class ProductItemFullComponent implements OnInit {
   ) {
     this.product = this.activatedRoute.snapshot.data.Product;
     this.wishListArr = this.activatedRoute.snapshot.data.WishlistArr;
-    console.log(this.activatedRoute);
-    console.log(this.wishListArr);
-    console.log(this.product);
   }
 
   ngOnInit(): void {
@@ -44,8 +41,6 @@ export class ProductItemFullComponent implements OnInit {
     this.firstNameFromStorage = sessionStorage.getItem('FirstName');
     this.productService.deleteProduct(this.product.id).subscribe(value => {
       this.router.navigateByUrl('/' + (this.firstNameFromStorage).toString());
-      console.log(value);
-      // this.ngOnInit();
     });
   }
 
@@ -62,10 +57,7 @@ export class ProductItemFullComponent implements OnInit {
   private loadWishlist(): void {
     for (const num of this.wishListArr) {
       if (num === this.product.id) {
-        console.log(this.product.id);
-        console.log('nummmmmmmmmmmm: ' + num);
         this.wishlistService.wishlistItemEmitter.emit(true);
-        console.log(this.wishListBoolean);
       }
     }
   }

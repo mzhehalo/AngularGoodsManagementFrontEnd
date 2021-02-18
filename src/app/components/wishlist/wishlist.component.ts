@@ -18,17 +18,16 @@ export class WishlistComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadWishlist();
-    this.wishlistService.getAllProductsWishlist().subscribe(data => {
-      this.likedProductsFromDataBase = data;
-      console.log('wishlistProducts' + this.likedProductsFromDataBase);
-    });
+    this.likedProductsFromDataBase = this.activatedRoute.snapshot.data.WishlistProducts;
+    // this.wishlistService.getAllProductsWishlist().subscribe(data => {
+    //   this.likedProductsFromDataBase = data;
+    // });
   }
 
   loadWishlist(): void {
     this.wishlistService.getLikesWishList().subscribe(wishListArr => {
-      console.log(wishListArr);
       this.wishlist = wishListArr;
-      this.wishlistService.wishlistArrLengthEmitter.emit(wishListArr.length);
+      this.wishlistService.wishlistQuantityEmitter.emit(wishListArr.length);
     });
   }
 }

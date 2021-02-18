@@ -10,8 +10,6 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   intercept(httpRequest: HttpRequest<any>, httpHandler: HttpHandler): Observable<HttpEvent<any>> {
-    console.log(this.authService.firstName + ':' + this.authService.password);
-    console.log(this.authService.getBasicAuth());
     if (this.authService.isUserLoggedIn() && httpRequest.url.indexOf('login') === -1) {
       const authReq = httpRequest.clone({
         headers: new HttpHeaders({

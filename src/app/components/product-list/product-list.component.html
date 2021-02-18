@@ -9,12 +9,12 @@
     <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>
   </div>
   <div class="ml-2">
-        <label>
-          <select (change)="pageSizeChange($event)">
-            <option *ngFor="let size of pageSizes" [ngValue]="size" [selected]="size == 6">
-              {{ size }}
-            </option>
-          </select>
-        </label>
+    <label>
+      <select (change)="pageSizeChange($event)">
+        <option *ngFor="let size of pageSizes" [ngValue]="size" [selected]="size == 6">
+          {{ size }}
+        </option>
+      </select>
+    </label>
   </div>
 </div>

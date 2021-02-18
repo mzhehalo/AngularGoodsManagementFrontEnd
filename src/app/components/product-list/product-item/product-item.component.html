@@ -1,13 +1,13 @@
 <div class="card mb-4 shadow-sm">
-  <img class="bd-placeholder-img card-img-top" width="100%"
-       src="https://www.pandasecurity.com/en/mediacenter/src/uploads/2016/03/pandasecurity-Who-are-the-most-famous-hackers-in-history.jpg">
+  <img class="bd-placeholder-img card-img-top" width="100%" height=200px
+       src="{{product.productImg}}">
   <div class="card-body">
     <p class="card-text">{{product.productName}}</p>
     <p class="card-text">Brand: {{product.productBrand}}</p>
     <p class="card-text">Description: {{product.productDescription | slice: 0:80}}...</p>
     <p class="card-text">Added by: <span class="h6">{{product.productSeller.firstName}}</span></p>
     <div class="d-flex justify-content-between align-items-center">
-      <div class="btn-group d-flex align-items-baseline">
+      <div *ngIf= "!isOrderFullRoute()" class="btn-group d-flex align-items-baseline">
         <button type="button" class="btn btn-sm btn-outline-primary" [routerLink]="'full-product/' + product.id">
           View
         </button>
@@ -25,7 +25,6 @@
                 (click)="addToCart()">
           Buy
         </button>
-        <!--        <div class="btn-outline-primary btn btn-sm like"  *ngIf="role === 'ROLE_CUSTOMER'"><input class="far fa-heart" type="checkbox" checked></div>-->
         <div class="btn-outline-primary btn btn-sm like" *ngIf="role === 'ROLE_CUSTOMER'">
           <i *ngIf="wishListBoolean" class="fas fa-heart" (click)="deleteFromWishlist()"></i>
           <i *ngIf="!wishListBoolean" class="far fa-heart" (click)="addToWishlist()"></i>

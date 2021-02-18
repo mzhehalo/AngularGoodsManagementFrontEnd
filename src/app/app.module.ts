@@ -1,4 +1,4 @@
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, HammerModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
@@ -27,9 +27,15 @@ import {ProductItemFullComponent} from './components/product-list/product-item/p
 import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 import {EditProductComponent} from './components/edit-product/edit-product.component';
 import {WishlistComponent} from './components/wishlist/wishlist.component';
-import { WrapperComponent } from './components/wrapper/wrapper.component';
-import { CartFullComponent } from './components/cart-full/cart-full.component';
+import {WrapperComponent} from './components/wrapper/wrapper.component';
+import {CartFullComponent} from './components/cart-full/cart-full.component';
 import {NgxPaginationModule} from 'ngx-pagination';
+import {OrderComponent} from './components/order/order.component';
+import {OrderListComponent} from './components/order/order-list/order-list.component';
+import {OrderItemComponent} from './components/order/order-list/order-item/order-item.component';
+import {OrderItemFullComponent} from './components/order/order-list/order-item/order-item-full/order-item-full.component';
+import {DropdownCategoriesComponent} from './components/dropdown-categories/dropdown-categories.component';
+import {ProductListByCategoryComponent} from './components/product-list-by-category/product-list-by-category.component';
 
 @NgModule({
   declarations: [
@@ -54,16 +60,23 @@ import {NgxPaginationModule} from 'ngx-pagination';
     WishlistComponent,
     WrapperComponent,
     CartFullComponent,
+    OrderComponent,
+    OrderListComponent,
+    OrderItemComponent,
+    OrderItemFullComponent,
+    DropdownCategoriesComponent,
+    ProductListByCategoryComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        NgbModule,
-        ReactiveFormsModule,
-        HttpClientModule,
-        FontAwesomeModule,
-        NgxPaginationModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    NgbModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    FontAwesomeModule,
+    NgxPaginationModule,
+    // HammerModule
+  ],
   providers: [AuthGuard, LoginComponent, ProductListComponent, {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpInterceptorService,

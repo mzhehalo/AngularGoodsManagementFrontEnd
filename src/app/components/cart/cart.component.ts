@@ -1,8 +1,6 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ProductModel} from '../../model/ProductModel';
+import {Component, OnInit} from '@angular/core';
 import {MessengerService} from '../product-list/messenger.service';
 import {CartService} from './cart.service';
-import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -17,16 +15,14 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('sum:----' + this.cartItems);
     this.getAllCartProducts();
-    this.messengerService.getMessage().subscribe(trigger => {
+    this.messengerService.getMessageCart().subscribe(trigger => {
       this.getAllCartProducts();
     });
   }
 
   getAllCartProducts(): void {
     this.cartService.getCartProducts(Number(sessionStorage.getItem('ID'))).subscribe(value => {
-      console.log(value);
       this.cartItems = value;
       this.cartService.cartQuantityEmitter.emit(this.cartItems.length);
       this.cartTotal = 0;

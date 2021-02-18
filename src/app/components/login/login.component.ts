@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from './auth.service';
+import {OrderService} from '../order/order.service';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,10 @@ export class LoginComponent implements OnInit {
   loginSuccess = false;
   private baseUrl = 'http://localhost:8100';
 
-  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private formBuilder: FormBuilder,
+              private authService: AuthService,
+              private router: Router
+  ) {
   }
 
   ngOnInit(): void {
@@ -38,10 +42,11 @@ export class LoginComponent implements OnInit {
       console.log('success');
       console.log(result);
     }, (error) => {
-        this.invalidLogin = true;
-        this.loginSuccess = false;
-        console.log('error');
-        console.log(error);
+      this.invalidLogin = true;
+      this.loginSuccess = false;
+      console.log('error');
+      console.log(error);
     });
   }
+
 }

@@ -3,6 +3,7 @@ import {AuthService} from '../login/auth.service';
 import {Router} from '@angular/router';
 import {WishlistService} from '../wishlist/wishlist.service';
 import {CartService} from '../cart/cart.service';
+import {OrderService} from '../order/order.service';
 
 @Component({
   selector: 'app-header',
@@ -15,25 +16,28 @@ export class HeaderComponent implements OnInit {
   role: string;
   wishlistQuantity: number;
   cartQuantity: number;
-  orders: number;
+  ordersQuantity: number;
 
   constructor(private authService: AuthService,
               private router: Router,
               private wishlistService: WishlistService,
-              private cartService: CartService
+              private cartService: CartService,
+              private orderService: OrderService
   ) {
-    console.log('HEADER constructor');
   }
 
   ngOnInit(): void {
+
     this.cartService.cartQuantityEmitter.subscribe(cartQuantityEm => {
       this.cartQuantity = cartQuantityEm;
     });
-    this.wishlistService.wishlistArrLengthEmitter.subscribe(wishlistQuantityEm => {
+    this.wishlistService.wishlistQuantityEmitter.subscribe(wishlistQuantityEm => {
       this.wishlistQuantity = wishlistQuantityEm;
     });
+    this.orderService.orderQuantityEmitter.subscribe(ordersQuantity => {
+      this.ordersQuantity = ordersQuantity;
+    });
     this.firstName = this.authService.getFirstNameFromSessionStorage();
-    console.log(this.firstName);
     this.role = sessionStorage.getItem('ROLE');
     this.authService.loggedInEmitterUserFirstName.subscribe(data => this.firstName = data);
     this.authService.loggedInEmitterUserRole.subscribe(data => this.role = data);
@@ -42,7 +46,6 @@ export class HeaderComponent implements OnInit {
     if (this.authService.isUserLoggedIn()) {
       this.authService.loggedInEmitter.emit(true);
     }
-    console.log('HEADER ngOnInit');
   }
 
   handleLogout(): void {
@@ -62,4 +65,5 @@ export class HeaderComponent implements OnInit {
     this.firstName = this.authService.getFirstNameFromSessionStorage();
     this.router.navigateByUrl(this.firstName + '/add-product');
   }
+
 }

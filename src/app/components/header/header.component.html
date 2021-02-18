@@ -15,6 +15,15 @@
       <a class="nav-item nav-link text-decoration-none text-light btn"
          *ngIf="firstName" (click)="routerMainPage()">Main Page</a>
     </li>
+
+    <li *ngIf="isLoggedIn">
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" data-toggle="dropdown">
+          Categories <span class="caret"></span>
+        </button>
+        <app-dropdown-menu [componentName]="'header'"></app-dropdown-menu>
+      </div>
+    </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
     </li>
@@ -24,6 +33,10 @@
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
       <a class="nav-item nav-link text-decoration-none text-light"
          [routerLink]="[firstName + '/wishlist']">Wishlist({{wishlistQuantity || 0}})</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_SELLER'">
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/orders']">Orders({{ordersQuantity || 0}})</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
       <a class="nav-item nav-link text-decoration-none text-light"

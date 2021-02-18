@@ -1,16 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProductModel} from '../../../model/ProductModel';
 import {AuthService} from '../../login/auth.service';
-import {faHeart} from '@fortawesome/free-solid-svg-icons';
 import {ProductService} from '../product.service';
 import {Router} from '@angular/router';
-import {stringify} from '@angular/compiler/src/util';
 import {ProductListComponent} from '../product-list.component';
 import {WishlistService} from '../../wishlist/wishlist.service';
-import {toNumbers} from '@angular/compiler-cli/src/diagnostics/typescript_version';
-import {MessengerService} from '../messenger.service';
 import {CartService} from '../../cart/cart.service';
-import {logger} from 'codelyzer/util/logger';
 
 @Component({
   selector: 'app-product-item',
@@ -24,7 +19,6 @@ export class ProductItemComponent implements OnInit {
   @Input()
   wishListBoolean: boolean;
 
-  // faHeart = faHeart;
   constructor(private authService: AuthService,
               private productService: ProductService,
               private router: Router,
@@ -34,10 +28,10 @@ export class ProductItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.product);
     this.authService.getUserDetails().subscribe(data => {
       this.role = data.role;
     });
+    // console.log('tttttttttttttttt' + this.product);
   }
 
   addToCart(): void {
@@ -46,9 +40,7 @@ export class ProductItemComponent implements OnInit {
 
   deleteProduct(): void {
     this.productList.deleteProductById(this.product.id);
-    console.log('deleteProductById(this.product.id)' + this.product.id);
     this.productService.deleteProduct(this.product.id).subscribe(value => {
-      console.log(value);
     }, error => console.log(error));
   }
 
@@ -60,5 +52,9 @@ export class ProductItemComponent implements OnInit {
   deleteFromWishlist(): void {
     this.wishlistService.deleteLikeFromWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
     this.wishListBoolean = !this.wishListBoolean;
+  }
+
+  isOrderFullRoute(): boolean {
+    return this.router.url.includes('orders/full-order/');
   }
 }
