@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ProductModel} from '../../../../model/ProductModel';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../login/auth.service';
 import {ProductListComponent} from '../../product-list.component';
 import {ProductService} from '../../product.service';
 import {WishlistService} from '../../../wishlist/wishlist.service';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-item-full',
@@ -23,7 +24,8 @@ export class ProductItemFullComponent implements OnInit {
               private productList: ProductListComponent,
               private productService: ProductService,
               private router: Router,
-              private wishlistService: WishlistService
+              private wishlistService: WishlistService,
+              private dom: DomSanitizer
   ) {
     this.product = this.activatedRoute.snapshot.data.Product;
     this.wishListArr = this.activatedRoute.snapshot.data.WishlistArr;
@@ -35,6 +37,11 @@ export class ProductItemFullComponent implements OnInit {
     });
     this.authService.getUserDetails().subscribe(data => this.role = data.role);
     this.loadWishlist();
+  }
+
+  photoURL(imageUrl): string {
+    const objectURL = 'data:image;base64,' + imageUrl;
+    return this.dom.bypassSecurityTrustUrl(objectURL) as string;
   }
 
   deleteProduct(): void {

@@ -12,7 +12,6 @@ export class OrderResolverService implements Resolve<OrderModel>{
   constructor(private orderService: OrderService) { }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<OrderModel> | Promise<OrderModel> | OrderModel {
-    console.log('sdsadsds' + route.params.orderId);
     return this.orderService.getOrderBySellerAndOrderId(Number(sessionStorage.getItem('ID')), route.params.orderId);
   }
 }

@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
 import {AddProductService} from './add-product.service';
-import {toNumbers} from '@angular/compiler-cli/src/diagnostics/typescript_version';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
 
 @Component({
@@ -13,9 +11,12 @@ import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categor
 export class AddProductComponent implements OnInit {
 
   addProductForm: FormGroup;
-  private id: string;
-  mainCategory = 'main none';
-  subCategory = 'sub none';
+  id: string;
+  mainCategory = 'main category';
+  subCategory = 'sub category';
+
+  selectedFile: File = null;
+  selectedFilesName = 'no name';
 
   constructor(private formBuilder: FormBuilder,
               private addProductService: AddProductService,
@@ -23,10 +24,11 @@ export class AddProductComponent implements OnInit {
   ) {
     this.addProductForm = formBuilder.group({
       productName: ['', [Validators.required]],
-      productDescription: ['', [Validators.required]],
-      productBrand: ['', [Validators.required]],
-      productPrice: ['', [Validators.required]],
-      productImg: ['', [Validators.required]]
+      productDescription: ['', [Validators.required, Validators.minLength(12), Validators.maxLength(100)]],
+      productBrand: ['', [Validators.required, Validators.maxLength(100)]],
+      productPrice: ['', [Validators.required, Validators.pattern('[1-9][0-9]*')]],
+      productImg: [null, [Validators.required]],
+      productCategory: ['', [Validators.required]]
     });
   }
 
@@ -41,17 +43,23 @@ export class AddProductComponent implements OnInit {
 
   addProduct(): void {
     this.id = sessionStorage.getItem('ID');
-    this.addProductService.addProduct({
-      mainCategory: this.mainCategory,
-      subCategory: this.subCategory,
-      productName: this.addProductForm.value.productName,
-      productDescription: this.addProductForm.value.productDescription,
-      productBrand: this.addProductForm.value.productBrand,
-      productPrice: this.addProductForm.value.productPrice,
-      productImg: this.addProductForm.value.productImg
-    }, Number(this.id)).subscribe(value => {
-      console.log(value);
-      console.log('product added');
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('mainCategory', this.mainCategory);
+    formData.append('subCategory', this.subCategory);
+    formData.append('productName', this.addProductForm.value.productName);
+    formData.append('productDescription', this.addProductForm.value.productDescription);
+    formData.append('productBrand', this.addProductForm.value.productBrand);
+    formData.append('productPrice', this.addProductForm.value.productPrice);
+    formData.append('sellerId', Number(this.id).toString());
+    this.addProductService.addProduct(formData).subscribe(value => {
     });
+  }
+
+  onSelectFile(event): void {
+    this.selectedFile = event.target.files[event.target.files.length - 1] as File;
+    if (this.selectedFile) {
+      this.selectedFilesName = this.selectedFile.name.slice(0, 30);
+    }
   }
 }

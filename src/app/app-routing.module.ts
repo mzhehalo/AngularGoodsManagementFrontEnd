@@ -47,6 +47,16 @@ const routes: Routes = [
           }
         },
         {
+          path: 'category/:mainCategory/:subCategory/edit-product/:id', component: EditProductComponent, resolve: {
+            Product: ProductResolverService
+          }
+        },
+        {
+          path: 'category/:mainCategory/:subCategory/full-product/:id/edit-product', component: EditProductComponent, resolve: {
+            Product: ProductResolverService
+          }
+        },
+        {
           path: 'cart/full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
             WishlistArr: WishlistResolverService

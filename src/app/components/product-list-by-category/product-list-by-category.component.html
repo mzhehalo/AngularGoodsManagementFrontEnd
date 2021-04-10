@@ -3,6 +3,7 @@
     <app-product-item [product]="categoryProduct" [wishListBoolean]="wishlist.indexOf(categoryProduct.id) >= 0"></app-product-item>
   </div>
 </div>
+<div class="alert alert-info" *ngIf="productsFromDataBase.length == 0">Product from {{subCategory}} category is empty!</div>
 <div *ngIf="productsFromDataBase.length !== 0" class="d-flex justify-content-center">
   <div>
     <pagination-controls (pageChange)="pageChanged($event)"></pagination-controls>

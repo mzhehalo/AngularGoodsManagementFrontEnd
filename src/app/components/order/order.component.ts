@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {OrderModel} from '../../model/OrderModel';
 import {ActivatedRoute} from '@angular/router';
 import {OrderService} from './order.service';
-import {MessengerService} from '../product-list/messenger.service';
+import {MessengerService} from '../../messengers/messenger.service';
 
 @Component({
   selector: 'app-order',

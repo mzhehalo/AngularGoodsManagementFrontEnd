@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../login/auth.service';
-import {UserModel} from '../../model/UserModel';
 
 @Component({
   selector: 'app-profile-menu',
@@ -14,12 +13,12 @@ export class ProfileMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.authService.loggedInEmitterUserFirstName.subscribe((data: string) => this.user = data);
-    this.user = this.authService.getFirstNameFromSessionStorage();
-
-
-    // if (this.authService.isUserLoggedIn()) {
-    //   this.authService.loggedInEmitterUserFirstName.emit(sessionStorage.getItem('FirstName'));
-    // }
+    this.user = sessionStorage.getItem('FirstName');
+    this.authService.loggedInEmitterUserFirstName.subscribe(firstName => {
+      this.user = firstName;
+      console.log(firstName);
+    }, error => {
+      console.log(error);
+    });
   }
 }

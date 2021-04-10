@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
-import {ProductModel} from '../model/ProductModel';
 import {Observable} from 'rxjs';
 import {DropdownCategoriesService} from '../components/dropdown-categories/dropdown-categories.service';
 import {ProductPageModel} from '../model/ProductPageModel';

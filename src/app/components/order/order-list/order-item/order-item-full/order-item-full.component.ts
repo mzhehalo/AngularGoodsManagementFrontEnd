@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {OrderModel} from '../../../../../model/OrderModel';
 
 @Component({
@@ -15,7 +15,6 @@ export class OrderItemFullComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.order);
   }
 
 }

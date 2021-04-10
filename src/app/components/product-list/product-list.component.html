@@ -3,6 +3,7 @@
     <app-product-item [product]="product" [wishListBoolean]="wishlist.indexOf(product.id) >= 0"></app-product-item>
   </div>
 </div>
+<div *ngIf="productsFromDataBase.length == 0" class="alert alert-info">Product list is Empty!</div>
 <div *ngIf="productsFromDataBase.length !== 0" class="d-flex justify-content-center">
 
   <div>

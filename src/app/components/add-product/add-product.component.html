@@ -15,24 +15,59 @@
                  formControlName="productDescription"
                  placeholder="product description">
         </div>
+        <div class="alert alert-danger mt-1"
+             *ngIf="addProductForm.controls['productDescription'].invalid
+             && addProductForm.controls['productDescription'].touched
+&& addProductForm.controls['productDescription'].errors.minlength">
+          Product description must be at least 12 characters
+        </div>
+
+        <div class="alert alert-danger mt-1"
+             *ngIf="addProductForm.controls['productDescription'].invalid
+             && addProductForm.controls['productDescription'].touched
+&& addProductForm.controls['productDescription'].errors.maxlength
+">
+          Product description must be no more 100 characters
+        </div>
+
         <div>
           <div class="mt-3">Product Brand:</div>
           <input class="mt-1"
                  formControlName="productBrand"
                  placeholder="product brand">
         </div>
+        <div class="alert alert-danger mt-1"
+             *ngIf="addProductForm.controls['productBrand'].invalid
+             && addProductForm.controls['productBrand'].touched
+&& addProductForm.controls['productBrand'].errors.maxlength
+">
+          Product brand must be no more 100 characters
+        </div>
         <div>
           <div class="mt-3">Price:</div>
-          <input class="mt-1"
+          <input type="number"
+                 min="0"
+                 class="mt-1"
                  formControlName="productPrice"
                  placeholder="price">
         </div>
 
-        <div>
-          <div class="mt-3">Add product img URL:</div>
-          <input class="mt-1"
+        <div class="alert alert-danger mt-1"
+             *ngIf="addProductForm.controls['productPrice'].invalid
+             && addProductForm.controls['productPrice'].touched
+&& addProductForm.controls['productPrice'].errors.pattern
+">
+          Only Positive digits
+        </div>
+
+        <div class="mt-3">
+          <label class="btn btn-primary" for="files">Select Image</label>
+          {{selectedFilesName}}...
+          <input id="files"
+                 style="visibility:hidden;"
+                 type="file"
                  formControlName="productImg"
-                 placeholder="url">
+                 (change)="onSelectFile($event)">
         </div>
 
         <div class="dropdown">
@@ -41,12 +76,12 @@
             <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
               Categories <span class="caret"></span>
             </button>
-            <app-dropdown-menu [componentName]="'add-product'"></app-dropdown-menu>
+            <app-dropdown-menu formControlName="productCategory" [componentName]="'add-product'"></app-dropdown-menu>
           </div>
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-end">
-        <button class="btn btn-primary" (click)="addProduct()">Add</button>
+        <button class="btn btn-primary" [disabled]="!addProductForm.valid" (click)="addProduct()">Add</button>
       </div>
     </form>
   </div>

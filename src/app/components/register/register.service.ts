@@ -12,7 +12,6 @@ export class RegisterService {
   constructor(private httpClient: HttpClient) { }
 
   registerUser(user: UserModel): Observable<UserModel> {
-    console.log(user);
     return this.httpClient.post<UserModel>(this.baseUrl + '/register', user);
   }
 }

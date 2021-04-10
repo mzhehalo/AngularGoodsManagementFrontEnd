@@ -13,7 +13,6 @@ export class HttpInterceptorService implements HttpInterceptor {
     if (this.authService.isUserLoggedIn() && httpRequest.url.indexOf('login') === -1) {
       const authReq = httpRequest.clone({
         headers: new HttpHeaders({
-          'Content-Type': 'application/json',
           Authorization: this.authService.getBasicAuth()
         })
       });

@@ -2,8 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {CartService} from '../cart/cart.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CartFullService} from './cart-full.service';
-import {Subject} from 'rxjs';
-import {MessengerService} from '../product-list/messenger.service';
+import {MessengerService} from '../../messengers/messenger.service';
 import {WishlistService} from '../wishlist/wishlist.service';
 
 @Component({

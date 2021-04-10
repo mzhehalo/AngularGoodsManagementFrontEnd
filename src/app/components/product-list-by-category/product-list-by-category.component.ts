@@ -3,6 +3,7 @@ import {WishlistService} from '../wishlist/wishlist.service';
 import {ActivatedRoute, Event, NavigationEnd, Router} from '@angular/router';
 import {ProductModel} from '../../model/ProductModel';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
+import {MessengerService} from '../../messengers/messenger.service';
 
 @Component({
   selector: 'app-product-list-by-category',
@@ -20,10 +21,10 @@ export class ProductListByCategoryComponent implements OnInit {
   subCategory: string;
 
   constructor(private wishlistService: WishlistService,
-              private activatedRoute: ActivatedRoute,
               private dropdownCategoriesService: DropdownCategoriesService,
               private router: Router,
-              private activatedRouteSnapshot: ActivatedRoute
+              private activatedRoute: ActivatedRoute,
+              private messengerService: MessengerService
   ) {
     this.router.events.subscribe((event: Event) => {
       if (event instanceof NavigationEnd) {
@@ -33,6 +34,7 @@ export class ProductListByCategoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subCategory = this.activatedRoute.snapshot.url[1].toString();
     this.productsFromDataBase = this.activatedRoute.snapshot.data.CategoryProducts.productList;
     this.totalItems = this.activatedRoute.snapshot.data.CategoryProducts.totalElements;
 
@@ -48,11 +50,15 @@ export class ProductListByCategoryComponent implements OnInit {
     this.dropdownCategoriesService.subCategoryEmitter.subscribe(value => {
       this.subCategory = value;
     });
+
+    this.messengerService.getMessageDeleteProduct().subscribe(id => {
+      this.productsFromDataBase = this.productsFromDataBase.filter(product => product.id !== id);
+    });
   }
 
   loadProducts(mainCategory: string, subCategory: string, currentPage: number, size: number): void {
-    this.dropdownCategoriesService.getProductsByCategory(this.activatedRouteSnapshot.snapshot.url[0].toString(),
-      this.activatedRouteSnapshot.snapshot.url[1].toString(),
+    this.dropdownCategoriesService.getProductsByCategory(this.activatedRoute.snapshot.url[0].toString(),
+      this.activatedRoute.snapshot.url[1].toString(),
       currentPage,
       size)
       .subscribe(value => {
@@ -60,10 +66,6 @@ export class ProductListByCategoryComponent implements OnInit {
         this.config.totalItems = value.totalElements;
         this.config.currentPage = value.number + 1;
       });
-  }
-
-  deleteProductById(id: number): void {
-    this.productsFromDataBase = this.productsFromDataBase.filter(product => product.id !== id);
   }
 
   loadWishlist(): void {
@@ -81,8 +83,8 @@ export class ProductListByCategoryComponent implements OnInit {
   pageSizeChange(event): void {
     this.config.currentPage = 1;
     this.config.itemsPerPage = event.target.value;
-    this.loadProducts(this.activatedRouteSnapshot.snapshot.url[0].toString(),
-      this.activatedRouteSnapshot.snapshot.url[1].toString(),
+    this.loadProducts(this.activatedRoute.snapshot.url[0].toString(),
+      this.activatedRoute.snapshot.url[1].toString(),
       this.config.currentPage,
       event.target.value);
   }

@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
-import {ProductModel} from '../model/ProductModel';
 import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot} from '@angular/router';
 import {Observable} from 'rxjs';
-import {AuthService} from '../components/login/auth.service';
 import {ProductService} from '../components/product-list/product.service';
 import {ProductPageModel} from '../model/ProductPageModel';
 
@@ -16,7 +14,12 @@ export class ProductsResolverService implements Resolve<ProductPageModel> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot):
     Observable<ProductPageModel> | Promise<ProductPageModel> | ProductPageModel {
-    return this.productService.getProductDetails(1, 6);
+
+    this.productService.getProductMinMax().subscribe(value => {
+      sessionStorage.setItem('priceMaxPossible', String(value[1] + 1));
+      sessionStorage.setItem('priceMinPossible', String(value[0] - 1));
+    });
+    return this.productService.getProductDetails(1, 6, 0, 999999999);
   }
 
 }

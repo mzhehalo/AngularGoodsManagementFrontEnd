@@ -3,9 +3,10 @@ import {ProductModel} from '../../../model/ProductModel';
 import {AuthService} from '../../login/auth.service';
 import {ProductService} from '../product.service';
 import {Router} from '@angular/router';
-import {ProductListComponent} from '../product-list.component';
 import {WishlistService} from '../../wishlist/wishlist.service';
 import {CartService} from '../../cart/cart.service';
+import {DomSanitizer} from '@angular/platform-browser';
+import {MessengerService} from '../../../messengers/messenger.service';
 
 @Component({
   selector: 'app-product-item',
@@ -22,16 +23,21 @@ export class ProductItemComponent implements OnInit {
   constructor(private authService: AuthService,
               private productService: ProductService,
               private router: Router,
-              private productList: ProductListComponent,
               private wishlistService: WishlistService,
-              private cartService: CartService
+              private cartService: CartService,
+              private dom: DomSanitizer,
+              private messengerService: MessengerService
   ) {}
 
   ngOnInit(): void {
     this.authService.getUserDetails().subscribe(data => {
       this.role = data.role;
     });
-    // console.log('tttttttttttttttt' + this.product);
+  }
+
+  photoURL(imageUrl): string {
+    const objectURL = 'data:image;base64,' + imageUrl;
+    return this.dom.bypassSecurityTrustUrl(objectURL) as string;
   }
 
   addToCart(): void {
@@ -39,8 +45,8 @@ export class ProductItemComponent implements OnInit {
   }
 
   deleteProduct(): void {
-    this.productList.deleteProductById(this.product.id);
     this.productService.deleteProduct(this.product.id).subscribe(value => {
+      this.messengerService.sendMessageDeleteProduct(this.product.id);
     }, error => console.log(error));
   }
 

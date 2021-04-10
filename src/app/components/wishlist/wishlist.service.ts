@@ -2,10 +2,6 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subscription} from 'rxjs';
 import {UserModel} from '../../model/UserModel';
-import {map} from 'rxjs/operators';
-import {logger} from 'codelyzer/util/logger';
-import {Router} from '@angular/router';
-import {dateComparator} from '@ng-bootstrap/ng-bootstrap/datepicker/datepicker-tools';
 import {ProductModel} from '../../model/ProductModel';
 
 @Injectable({

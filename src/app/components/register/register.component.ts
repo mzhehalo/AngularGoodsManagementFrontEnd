@@ -10,6 +10,8 @@ import {Router} from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  passwordMatch = false;
+  isEmailExist: string;
 
   constructor(private formBuilder: FormBuilder,
               private registerService: RegisterService,
@@ -18,11 +20,17 @@ export class RegisterComponent implements OnInit {
     this.registerForm = formBuilder.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      password1: ['', [Validators.required]],
-      password2: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
       role: ['', [Validators.required]]
-    });
+    }, {validators: this.password.bind(this)});
+  }
+
+  password(formGroup: FormGroup): any {
+    const {value: password} = formGroup.get('password');
+    const {value: confirmPassword} = formGroup.get('confirmPassword');
+    return password === confirmPassword ? this.passwordMatch = true : this.passwordMatch = false;
   }
 
   ngOnInit(): void {
@@ -33,11 +41,17 @@ export class RegisterComponent implements OnInit {
       firstName: this.registerForm.value.firstName,
       lastName: this.registerForm.value.lastName,
       email: this.registerForm.value.email,
-      password: this.registerForm.value.password1,
+      password: this.registerForm.value.password,
       role: this.registerForm.value.role
     }).subscribe(value => {
-      console.log(value);
       this.router.navigateByUrl('login');
+    }, error => {
+      if (error.error === 'Email already exist') {
+        this.isEmailExist = error.error;
+      } else {
+        this.isEmailExist = '';
+      }
+      console.log(error);
     });
   }
 }

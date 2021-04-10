@@ -19,9 +19,6 @@ export class WishlistComponent implements OnInit {
   ngOnInit(): void {
     this.loadWishlist();
     this.likedProductsFromDataBase = this.activatedRoute.snapshot.data.WishlistProducts;
-    // this.wishlistService.getAllProductsWishlist().subscribe(data => {
-    //   this.likedProductsFromDataBase = data;
-    // });
   }
 
   loadWishlist(): void {

@@ -4,15 +4,25 @@
     <form [formGroup]="filterGroup">
       <div class="form-group">
         <label for="from">From</label>
-        <input type="number" id="from" formControlName="filterFrom">
+        <br>
+        <input [min]="priceMinPossible"
+               [max]="priceMaxPossible"
+               type="number"
+               id="from"
+               formControlName="filterFrom">
       </div>
 
       <div class="form-group">
         <label for="to">To</label>
-        <input type="number" id="to" formControlName="filterTo" >
+        <br>
+        <input [min]="priceMinPossible"
+               [max]="priceMaxPossible"
+               type="number"
+               id="to"
+               formControlName="filterTo" >
       </div>
 
-      <button class="btn btn-primary btn-block btn-sm">Filter</button>
+      <button class="btn btn-primary btn-block btn-sm" (click)="filterPrice()">Filter Price</button>
     </form>
   </div>
 </div>

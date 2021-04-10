@@ -1,9 +1,8 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {Observable, Subscription} from 'rxjs';
-import {ProductModel} from '../../model/ProductModel';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import {CartModel} from '../../model/CartModel';
-import {MessengerService} from '../product-list/messenger.service';
+import {MessengerService} from '../../messengers/messenger.service';
 
 @Injectable({
   providedIn: 'root'

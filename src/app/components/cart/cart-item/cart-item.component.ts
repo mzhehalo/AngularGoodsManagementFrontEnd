@@ -3,7 +3,7 @@ import {CartModel} from '../../../model/CartModel';
 import {AuthService} from '../../login/auth.service';
 import {Router} from '@angular/router';
 import {CartService} from '../cart.service';
-import {MessengerService} from '../../product-list/messenger.service';
+import {MessengerService} from '../../../messengers/messenger.service';
 
 @Component({
   selector: 'app-cart-item',

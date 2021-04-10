@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {AuthService} from './auth.service';
-import {OrderService} from '../order/order.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +14,6 @@ export class LoginComponent implements OnInit {
   successMessage: string;
   invalidLogin = false;
   loginSuccess = false;
-  private baseUrl = 'http://localhost:8100';
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -24,29 +22,27 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.loggedInEmitterUserFirstName.subscribe(firstName => {
+      this.router.navigate(['', firstName]);
+
+    });
     this.loginForm = this.formBuilder.group({
-      firstName: ['', [Validators.required]],
-      password: ['', [Validators.required]]
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
   authenticate(): void {
     return this.authService.authenticate({
-      firstName: this.loginForm.value.firstName,
+      email: this.loginForm.value.email,
       password: this.loginForm.value.password
     }).subscribe((result) => {
       this.invalidLogin = false;
       this.loginSuccess = true;
-      this.successMessage = 'Login Successful.';
-      this.router.navigate(['', this.loginForm.value.firstName]);
-      console.log('success');
-      console.log(result);
+      this.successMessage = 'Login Successful';
     }, (error) => {
       this.invalidLogin = true;
       this.loginSuccess = false;
-      console.log('error');
-      console.log(error);
     });
   }
-
 }

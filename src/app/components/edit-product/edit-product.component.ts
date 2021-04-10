@@ -16,8 +16,11 @@ export class EditProductComponent implements OnInit {
   product: ProductModel;
   editProductForm: any;
   firstNameFromStorage: string;
-  mainCategory: string;
-  subCategory: string;
+  mainCategory = 'main category';
+  subCategory = 'sub category';
+
+  selectedFile: File = null;
+  selectedFilesName = 'no name';
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -29,10 +32,11 @@ export class EditProductComponent implements OnInit {
     this.product = activatedRoute.snapshot.data.Product;
     this.editProductForm = this.formBuilder.group({
       productName: [this.product.productName, [Validators.required]],
-      productDescription: [this.product.productDescription, [Validators.required]],
-      productBrand: [this.product.productBrand, [Validators.required]],
-      productPrice: [this.product.productPrice, [Validators.required]],
-      productImg: [this.product.productImg, [Validators.required]]
+      productDescription: [this.product.productDescription, [Validators.required, Validators.minLength(12), Validators.maxLength(100)]],
+      productBrand: [this.product.productBrand, [Validators.required, Validators.maxLength(100)]],
+      productPrice: [this.product.productPrice, [Validators.required, Validators.pattern('[1-9][0-9]*|0')]],
+      productImg: [null, [Validators.required]],
+      productCategory: [this.product.mainCategory, [Validators.required]]
     });
 
     this.mainCategory = this.product.mainCategory;
@@ -50,17 +54,25 @@ export class EditProductComponent implements OnInit {
 
   editProduct(): void {
     this.firstNameFromStorage = sessionStorage.getItem('FirstName');
-    this.editProductService.editProduct({
-      mainCategory: this.mainCategory,
-      subCategory: this.subCategory,
-      productName: this.editProductForm.value.productName,
-      productDescription: this.editProductForm.value.productDescription,
-      productBrand: this.editProductForm.value.productBrand,
-      productPrice: this.editProductForm.value.productPrice,
-      productImg: this.editProductForm.value.productImg
-    }, this.product.id).subscribe(value => {
+    const formData = new FormData();
+    formData.append('file', this.selectedFile, this.selectedFile.name);
+    formData.append('mainCategory', this.mainCategory);
+    formData.append('subCategory', this.subCategory);
+    formData.append('productName', this.editProductForm.value.productName);
+    formData.append('productDescription', this.editProductForm.value.productDescription);
+    formData.append('productBrand', this.editProductForm.value.productBrand);
+    formData.append('productPrice', this.editProductForm.value.productPrice);
+    formData.append('productId', this.product.id.toString());
+    this.editProductService.editProduct(formData).subscribe(value => {
         this.router.navigateByUrl(this.firstNameFromStorage);
       });
+  }
+
+  onSelectFile(event): void {
+    this.selectedFile = event.target.files[event.target.files.length - 1] as File;
+    if (this.selectedFile) {
+      this.selectedFilesName = this.selectedFile.name.slice(0, 30);
+    }
   }
 
 }

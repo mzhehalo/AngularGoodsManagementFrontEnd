@@ -3,10 +3,7 @@ import {UserModel} from '../../model/UserModel';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ProductModel} from '../../model/ProductModel';
-import {WishlistService} from '../wishlist/wishlist.service';
-import {OrderService} from '../order/order.service';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +11,15 @@ import {OrderService} from '../order/order.service';
 export class AuthService {
   private baseUrl = 'http://localhost:8100';
 
+  USER_EMAIL = 'Email';
   USER_NAME_SESSION_ID = 'ID';
   USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
   USER_NAME_SESSION_FIRST_NAME = 'FirstName';
   USER_NAME_SESSION_ROLE = 'ROLE';
-  public firstName: string;
-  public password: any;
+  USER_FILTER_PRICE_MIN = 'priceMin';
+  USER_FILTER_PRICE_MAX = 'priceMax';
+  USER_FILTER_PRICE_MIN_POSSIBLE = 'priceMinPossible';
+  USER_FILTER_PRICE_MAX_POSSIBLE = 'priceMaxPossible';
   @Output() loggedInEmitter: EventEmitter<boolean> = new EventEmitter();
   @Output() loggedInEmitterUserFirstName: EventEmitter<string> = new EventEmitter();
   @Output() loggedInEmitterUserRole: EventEmitter<string> = new EventEmitter();
@@ -31,43 +31,44 @@ export class AuthService {
   }
 
   authenticate(authenticationModel: UserModel): any {
-    console.log(authenticationModel.firstName + authenticationModel.password);
     return this.httpClient.get(this.baseUrl + '/login',
-      {headers: {authorization: this.createBasicAuthToken(authenticationModel.firstName, authenticationModel.password)}})
+      {headers: {authorization: this.createBasicAuthToken(authenticationModel.email, authenticationModel.password)}})
       .pipe(map((res) => {
-        this.firstName = authenticationModel.firstName;
-        this.password = authenticationModel.password;
-        this.registerSuccessfulLogin(authenticationModel.firstName, authenticationModel.password);
+        this.registerSuccessfulLogin(authenticationModel.email, authenticationModel.password);
         this.loggedInEmitter.emit(true);
-        this.loggedInEmitterUserFirstName.emit(authenticationModel.firstName);
         this.setUserToSessionStorage();
       }));
   }
 
-  createBasicAuthToken(firstName: any, password: any): string {
-    return 'Basic ' + btoa(firstName + ':' + password);
+  createBasicAuthToken(email: any, password: any): string {
+    return 'Basic ' + btoa(email + ':' + password);
   }
 
-  registerSuccessfulLogin(firstName: string, password: string): void {
-    sessionStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, `Basic ${btoa(firstName + ':' + password)}`);
-    sessionStorage.setItem('FirstName', firstName);
+  registerSuccessfulLogin(email: string, password: string): void {
+    sessionStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, `Basic ${btoa(email + ':' + password)}`);
+    sessionStorage.setItem(this.USER_EMAIL, email);
   }
 
   setUserToSessionStorage(): void {
-    this.getUserDetails().subscribe(data => {
-      sessionStorage.setItem(this.USER_NAME_SESSION_ID, String(data.id));
-      sessionStorage.setItem(this.USER_NAME_SESSION_ROLE, data.role);
-      this.loggedInEmitterUserRole.emit(data.role);
+    this.getUserDetails().subscribe(user => {
+      sessionStorage.setItem(this.USER_NAME_SESSION_ID, String(user.id));
+      sessionStorage.setItem(this.USER_NAME_SESSION_ROLE, user.role);
+      sessionStorage.setItem(this.USER_NAME_SESSION_FIRST_NAME, user.firstName);
+      this.loggedInEmitterUserRole.emit(user.role);
+      this.loggedInEmitterUserFirstName.emit(user.firstName);
     });
   }
 
   logout(): void {
     sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
     sessionStorage.removeItem(this.USER_NAME_SESSION_FIRST_NAME);
+    sessionStorage.removeItem(this.USER_EMAIL);
     sessionStorage.removeItem(this.USER_NAME_SESSION_ROLE);
     sessionStorage.removeItem(this.USER_NAME_SESSION_ID);
-    this.firstName = null;
-    this.password = null;
+    sessionStorage.removeItem(this.USER_FILTER_PRICE_MIN);
+    sessionStorage.removeItem(this.USER_FILTER_PRICE_MAX);
+    sessionStorage.removeItem(this.USER_FILTER_PRICE_MIN_POSSIBLE);
+    sessionStorage.removeItem(this.USER_FILTER_PRICE_MAX_POSSIBLE);
     this.loggedInEmitter.emit(false);
     this.loggedInEmitterUserRole.emit(null);
     this.route.navigateByUrl('login');
@@ -87,6 +88,6 @@ export class AuthService {
   }
 
   getUserDetails(): Observable<UserModel> {
-    return this.http.post<UserModel>(this.baseUrl + '/user/get', sessionStorage.getItem(this.USER_NAME_SESSION_FIRST_NAME));
+    return this.http.post<UserModel>(this.baseUrl + '/user/get', sessionStorage.getItem(this.USER_EMAIL));
   }
 }
