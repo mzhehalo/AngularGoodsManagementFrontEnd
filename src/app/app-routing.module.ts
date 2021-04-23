@@ -22,6 +22,9 @@ import {OrderItemFullComponent} from './components/order/order-list/order-item/o
 import {OrderResolverService} from './service-resolvers/order-resolver.service';
 import {ProductsCategoryResolverService} from './service-resolvers/products-category-resolver.service';
 import {WishlistProductsResolverService} from './service-resolvers/wishlist-products-resolver.service';
+import {EditCategoriesComponent} from './components/edit-categories/edit-categories.component';
+import {StatisticsComponent} from './components/statistics/statistics.component';
+import {EditUsersComponent} from './components/edit-users/edit-users.component';
 
 
 const routes: Routes = [
@@ -88,6 +91,15 @@ const routes: Routes = [
           path: 'orders/full-order/:orderId', component: OrderItemFullComponent, resolve: {
             Order: OrderResolverService
           }
+        },
+        {
+          path: 'edit/categories', component: EditCategoriesComponent
+        },
+        {
+          path: 'statistics', component: StatisticsComponent
+        },
+        {
+          path: 'edit/users', component: EditUsersComponent
         }
       ],
     }

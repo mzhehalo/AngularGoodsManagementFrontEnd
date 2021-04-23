@@ -7,7 +7,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MainComponent} from './components/main/main.component';
 import {LoginComponent} from './components/login/login.component';
 import {RegisterComponent} from './components/register/register.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthGuard} from './guards/auth.guard';
 import {ProfileMenuComponent} from './components/profile-menu/profile-menu.component';
@@ -36,6 +36,16 @@ import {OrderItemComponent} from './components/order/order-list/order-item/order
 import {OrderItemFullComponent} from './components/order/order-list/order-item/order-item-full/order-item-full.component';
 import {DropdownCategoriesComponent} from './components/dropdown-categories/dropdown-categories.component';
 import {ProductListByCategoryComponent} from './components/product-list-by-category/product-list-by-category.component';
+import { EditCategoriesComponent } from './components/edit-categories/edit-categories.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import { EditUsersComponent } from './components/edit-users/edit-users.component';
+import {MatTableModule} from '@angular/material/table';
+import { DialogBoxComponent } from './components/edit-categories/dialog-box/dialog-box.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -66,6 +76,10 @@ import {ProductListByCategoryComponent} from './components/product-list-by-categ
     OrderItemFullComponent,
     DropdownCategoriesComponent,
     ProductListByCategoryComponent,
+    EditCategoriesComponent,
+    StatisticsComponent,
+    EditUsersComponent,
+    DialogBoxComponent
   ],
   imports: [
     BrowserModule,
@@ -75,8 +89,16 @@ import {ProductListByCategoryComponent} from './components/product-list-by-categ
     HttpClientModule,
     FontAwesomeModule,
     NgxPaginationModule,
-    // HammerModule
+    FormsModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatInputModule,
+    BrowserModule,
+    BrowserAnimationsModule
   ],
+  entryComponents: [DialogBoxComponent],
   providers: [AuthGuard, LoginComponent, ProductListComponent, {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpInterceptorService,

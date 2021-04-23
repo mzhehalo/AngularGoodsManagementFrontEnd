@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Row Action : <strong>{{action}}</strong></h1>
+<div mat-dialog-content>
+  <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
+    <input placeholder="{{action}} Main category" matInput [(ngModel)]="categories.mainCategory">
+  </mat-form-field>
+  <mat-form-field *ngIf="action != 'Delete'">
+    <input placeholder="{{action}} Sub category" matInput [(ngModel)]="categories.subCategory">
+  </mat-form-field>
+  <ng-template #elseTemplate>
+    Sure to delete <b>{{categories.mainCategory}} and {{categories.subCategory}}</b>?
+  </ng-template>
+</div>
+<div mat-dialog-actions>
+  <button class="btn btn-primary" (click)="doAction()">{{action}}</button>
+  <button class="btn btn-primary ml-2" (click)="closeDialog()">Cancel</button>
+</div>

@@ -13,7 +13,6 @@ export class EditUserService {
   }
 
   editUser(user: UserModel, email: string): Observable<UserModel> {
-    const body = {user, email};
-    return this.httpClient.put<UserModel>(this.baseUrl + '/user/edit', body);
+    return this.httpClient.put<UserModel>(this.baseUrl + '/user/edit', {user, email});
   }
 }

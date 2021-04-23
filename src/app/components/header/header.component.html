@@ -9,6 +9,7 @@
     </ng-template>
     <div class="ml-1 bg-success align-self-end rounded pl-1 pr-1 " *ngIf="role === 'ROLE_CUSTOMER'">Customer</div>
     <div class="ml-1 bg-deepskyblue align-self-end rounded pl-1 pr-1" *ngIf="role === 'ROLE_SELLER'">Seller</div>
+    <div class="ml-1 bg-warning align-self-end rounded pl-1 pr-1" *ngIf="role === 'ROLE_ADMIN'">Admin</div>
   </div>
   <ul class="list-unstyled d-flex align-content-center p-0 m-0 d-flex justify-content-end">
     <li class="ml-1 mr-1" *ngIf="isLoggedIn">
@@ -41,6 +42,18 @@
     <li class="ml-1 mr-1" *ngIf="role === 'ROLE_CUSTOMER'">
       <a class="nav-item nav-link text-decoration-none text-light"
          [routerLink]="[firstName + '/cart']">Cart({{cartQuantity || 0}})</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_ADMIN'">
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/edit/categories']">Edit Categories</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_ADMIN'">
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/statistics']">Statistics</a>
+    </li>
+    <li class="ml-1 mr-1" *ngIf="role === 'ROLE_ADMIN'">
+      <a class="nav-item nav-link text-decoration-none text-light"
+         [routerLink]="[firstName + '/edit/users']">Edit Users</a>
     </li>
     <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
       <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
