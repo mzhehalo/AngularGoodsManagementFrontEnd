@@ -46,4 +46,12 @@ export class MessengerService {
     return this.subjectFilter.asObservable();
   }
 
+  sendMessageAddCategory(): void {
+    this.subjectFilter.next();
+  }
+
+  getMessageAddCategory(): Observable<{}> {
+    return this.subjectFilter.asObservable();
+  }
+
 }

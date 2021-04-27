@@ -12,7 +12,7 @@ import {MessengerService} from '../../messengers/messenger.service';
 export class OrderComponent implements OnInit {
 
   order: OrderModel;
-  orderList: OrderModel[];
+  orderList: OrderModel[] = [];
 
 
   constructor(private activatedRoute: ActivatedRoute,

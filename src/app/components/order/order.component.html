@@ -1,3 +1,3 @@
 <h3 class="text-center">Orders</h3>
-<div *ngIf="orderList.length === 0" class="alert alert-info">Your order list is Empty!</div>
+<div *ngIf="!orderList.length" class="alert alert-info">Your order list is Empty!</div>
 <app-order-list [orderList] = "orderList"></app-order-list>

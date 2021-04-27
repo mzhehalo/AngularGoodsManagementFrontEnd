@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {CategoryModel} from '../../model/category-model';
+import {MainCategoryModel} from '../../model/main-category-model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,20 +13,31 @@ export class EditCategoriesService {
   constructor(private http: HttpClient) {
   }
 
-  getCategories(): Observable<CategoryModel[]> {
-    return this.http.get<CategoryModel[]>(this.baseUrl + '/get');
+  getCategories(): Observable<MainCategoryModel[]> {
+    return this.http.get<MainCategoryModel[]>(this.baseUrl + '/get');
   }
 
-  addCategories(mainCategory, subCategory): Observable<CategoryModel[]> {
-    return this.http.post<CategoryModel[]>(this.baseUrl + '/add', {mainCategory, subCategory});
+  addMainCategory(mainCategory): Observable<MainCategoryModel[]> {
+    return this.http.post<MainCategoryModel[]>(this.baseUrl + '/add/main', {mainCategory});
   }
 
-  updateCategories(id, mainCategory, subCategory): Observable<any> {
-    return this.http.put(this.baseUrl + '/update', {id, mainCategory, subCategory});
+  addSubCategory(idMain, subCategory): Observable<MainCategoryModel[]> {
+    return this.http.post<MainCategoryModel[]>(this.baseUrl + '/add/sub/' + idMain, {idMain, subCategory});
   }
 
-  deleteCategories(id): Observable<any> {
-   return this.http.delete(this.baseUrl + '/delete/' + id);
+  updateMainCategory(id, mainCategory): Observable<any> {
+    return this.http.put(this.baseUrl + '/update/main/', {id, mainCategory});
   }
 
+  updateSubCategory(id, subCategory): Observable<any> {
+    return this.http.put(this.baseUrl + '/update/sub/', {id, subCategory});
+  }
+
+  deleteMainCategory(id): Observable<any> {
+    return this.http.delete(this.baseUrl + '/delete/main/' + id);
+  }
+
+  deleteSubCategory(id): Observable<any> {
+    return this.http.delete(this.baseUrl + '/delete/sub/' + id);
+  }
 }

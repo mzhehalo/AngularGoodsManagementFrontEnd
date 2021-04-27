@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {RegisterService} from './register.service';
 import {Router} from '@angular/router';
+import {EditUserService} from '../edit-user/edit-user.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +14,7 @@ export class RegisterComponent implements OnInit {
   isEmailExist: string;
 
   constructor(private formBuilder: FormBuilder,
-              private registerService: RegisterService,
+              private editUserService: EditUserService,
               private router: Router
   ) {
     this.registerForm = formBuilder.group({
@@ -37,7 +37,7 @@ export class RegisterComponent implements OnInit {
   }
 
   registerUser(): void {
-    this.registerService.registerUser({
+    this.editUserService.registerUser({
       firstName: this.registerForm.value.firstName,
       lastName: this.registerForm.value.lastName,
       email: this.registerForm.value.email,

@@ -60,15 +60,7 @@ export class AuthService {
   }
 
   logout(): void {
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-    sessionStorage.removeItem(this.USER_NAME_SESSION_FIRST_NAME);
-    sessionStorage.removeItem(this.USER_EMAIL);
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ROLE);
-    sessionStorage.removeItem(this.USER_NAME_SESSION_ID);
-    sessionStorage.removeItem(this.USER_FILTER_PRICE_MIN);
-    sessionStorage.removeItem(this.USER_FILTER_PRICE_MAX);
-    sessionStorage.removeItem(this.USER_FILTER_PRICE_MIN_POSSIBLE);
-    sessionStorage.removeItem(this.USER_FILTER_PRICE_MAX_POSSIBLE);
+    sessionStorage.clear();
     this.loggedInEmitter.emit(false);
     this.loggedInEmitterUserRole.emit(null);
     this.route.navigateByUrl('login');

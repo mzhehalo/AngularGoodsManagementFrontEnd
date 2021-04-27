@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, Optional} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {CategoryModel} from '../../../model/category-model';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MainCategoryModel} from '../../../model/main-category-model';
 
 @Component({
   selector: 'app-dialog-box',
@@ -14,7 +14,9 @@ export class DialogBoxComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogBoxComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: CategoryModel) {
+    @Optional()
+    @Inject(MAT_DIALOG_DATA)
+    public data: MainCategoryModel) {
     console.log(data);
     this.categories = {...data};
     this.action = this.categories.action;

@@ -1,19 +1,10 @@
 <ul class="dropdown-menu">
-  <li class="dropdown-submenu dropdown-item btn">
-    <span tabindex="-1" (click)="passCategory('notebooks', 'notebooks')">Notebooks</span>
-    <ul class="dropdown-menu">
-      <li class="dropdown-item btn" (click)="passCategory('notebooks' ,'lenovo')">Lenovo</li>
-<!--      <li class="dropdown-item btn" (click)="passCategory('notebooks','asus')">Asus</li>-->
-<!--      <li class="dropdown-item btn" (click)="passCategory('notebooks','acer')">Acer</li>-->
+  <li class="dropdown-submenu dropdown-item btn" *ngFor="let category of data">
+    <span tabindex="-1"
+          (click)="passCategory(category.mainCategory, category.mainCategory)">{{category.mainCategory}}</span>
+    <ul class="dropdown-menu" *ngIf="category.subCategories.length">
+      <li class="dropdown-item btn" *ngFor="let subCategory of category.subCategories"
+          (click)="passCategory(category.mainCategory , subCategory.subCategory)">{{subCategory.subCategory}}</li>
     </ul>
   </li>
-  <li class="dropdown-submenu dropdown-item btn">
-    <span tabindex="-1" (click)="passCategory('smartphones', 'smartphones')">Smartphones</span>
-    <ul class="dropdown-menu">
-      <li class="dropdown-item btn" (click)="passCategory('smartphones','xiaomi')">Xiaomi</li>
-<!--      <li class="dropdown-item btn" (click)="passCategory('smartphones','apple')">Apple</li>-->
-<!--      <li class="dropdown-item btn" (click)="passCategory('smartphones','samsung')">Samsung</li>-->
-    </ul>
-  </li>
-<!--  <li class="dropdown-item btn" (click)="passCategory('tablets','tablets')">Tablets</li>-->
 </ul>

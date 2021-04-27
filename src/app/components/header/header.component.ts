@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.role = sessionStorage.getItem('ROLE');
     this.cartService.cartQuantityEmitter.subscribe(cartQuantityEm => {
       this.cartQuantity = cartQuantityEm;
     });
@@ -38,7 +38,6 @@ export class HeaderComponent implements OnInit {
       this.ordersQuantity = ordersQuantity;
     });
     this.firstName = this.authService.getFirstNameFromSessionStorage();
-    this.role = sessionStorage.getItem('ROLE');
     this.authService.loggedInEmitterUserFirstName.subscribe(data => this.firstName = data);
     this.authService.loggedInEmitterUserRole.subscribe(data => this.role = data);
     this.authService.loggedInEmitter.subscribe((data: boolean) => this.isLoggedIn = data);
@@ -65,5 +64,4 @@ export class HeaderComponent implements OnInit {
     this.firstName = this.authService.getFirstNameFromSessionStorage();
     this.router.navigateByUrl(this.firstName + '/add-product');
   }
-
 }

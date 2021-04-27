@@ -46,6 +46,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
+import {ConfirmationDialogService} from './components/confirmation-dialog/confirmation-dialog.service';
 
 @NgModule({
   declarations: [
@@ -79,7 +81,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     EditCategoriesComponent,
     StatisticsComponent,
     EditUsersComponent,
-    DialogBoxComponent
+    DialogBoxComponent,
+    ConfirmationDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -98,12 +101,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     BrowserModule,
     BrowserAnimationsModule
   ],
-  entryComponents: [DialogBoxComponent],
+  entryComponents: [DialogBoxComponent, ConfirmationDialogComponent],
   providers: [AuthGuard, LoginComponent, ProductListComponent, {
     provide: HTTP_INTERCEPTORS,
     useClass: HttpInterceptorService,
     multi: true
-  }],
+  },
+    ConfirmationDialogService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

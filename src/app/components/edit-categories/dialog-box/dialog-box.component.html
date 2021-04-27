@@ -1,13 +1,13 @@
 <h1 mat-dialog-title>Row Action : <strong>{{action}}</strong></h1>
 <div mat-dialog-content>
   <mat-form-field *ngIf="action != 'Delete'; else elseTemplate">
-    <input placeholder="{{action}} Main category" matInput [(ngModel)]="categories.mainCategory">
-  </mat-form-field>
-  <mat-form-field *ngIf="action != 'Delete'">
-    <input placeholder="{{action}} Sub category" matInput [(ngModel)]="categories.subCategory">
+    <input *ngIf="categories.mainCategory && action === 'Update'" placeholder="{{action}} Main category" matInput [(ngModel)]="categories.mainCategory">
+    <input *ngIf="categories.subCategory" placeholder="{{action}} Sub category" matInput [(ngModel)]="categories.subCategory">
+    <input *ngIf="action === 'AddSub'" placeholder="Add sub category to {{categories.mainCategory}}" matInput [(ngModel)]="categories.subCategories.subCategory">
+    <input *ngIf="action === 'Add'" placeholder="{{action}} Main category" matInput [(ngModel)]="categories.mainCategory">
   </mat-form-field>
   <ng-template #elseTemplate>
-    Sure to delete <b>{{categories.mainCategory}} and {{categories.subCategory}}</b>?
+    Sure to delete <b>{{categories.mainCategory}}{{categories.subCategory}}</b>?
   </ng-template>
 </div>
 <div mat-dialog-actions>

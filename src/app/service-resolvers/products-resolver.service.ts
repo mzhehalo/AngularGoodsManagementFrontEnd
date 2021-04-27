@@ -16,8 +16,13 @@ export class ProductsResolverService implements Resolve<ProductPageModel> {
     Observable<ProductPageModel> | Promise<ProductPageModel> | ProductPageModel {
 
     this.productService.getProductMinMax().subscribe(value => {
-      sessionStorage.setItem('priceMaxPossible', String(value[1] + 1));
-      sessionStorage.setItem('priceMinPossible', String(value[0] - 1));
+      if (value[0] === 0 && value[1] === 0) {
+        sessionStorage.setItem('priceMaxPossible', String(value[1]));
+        sessionStorage.setItem('priceMinPossible', String(value[0]));
+      } else {
+        sessionStorage.setItem('priceMaxPossible', String(value[1] + 1));
+        sessionStorage.setItem('priceMinPossible', String(value[0] - 1));
+      }
     });
     return this.productService.getProductDetails(1, 6, 0, 999999999);
   }
