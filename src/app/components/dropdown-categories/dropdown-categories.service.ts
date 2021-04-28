@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {ProductPageModel} from '../../model/ProductPageModel';
+import {UserService} from '../edit-user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class DropdownCategoriesService {
 
   constructor(private http: HttpClient,
               private router: Router,
+              private userService: UserService
               ) {
   }
 
@@ -23,7 +25,7 @@ export class DropdownCategoriesService {
       this.mainCategoryEmitter.emit(mainCategory);
       this.subCategoryEmitter.emit(subCategory);
     } else if (componentName.includes('header')) {
-      this.router.navigate([sessionStorage.getItem('ID') + '/category/' + mainCategory + '/' + subCategory]);
+      this.router.navigate([this.userService.getUserIdFromSessionStorage() + '/category/' + mainCategory + '/' + subCategory]);
     }
   }
 

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, Subscription} from 'rxjs';
 import {UserModel} from '../../model/UserModel';
 import {ProductModel} from '../../model/ProductModel';
+import {UserService} from '../edit-user/user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,17 +14,17 @@ export class WishlistService {
   @Output() wishlistQuantityEmitter: EventEmitter<number> = new EventEmitter();
   @Output() wishlistItemEmitter: EventEmitter<boolean> = new EventEmitter();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private userService: UserService
+              ) {
   }
 
   getAllProductsWishlist(): Observable<ProductModel[]> {
-    const userId = sessionStorage.getItem('ID');
-    return this.http.get<ProductModel[]>(this.baseUrl + '/get-products/' + userId);
+    return this.http.get<ProductModel[]>(this.baseUrl + '/get-products/' + this.userService.getUserIdFromSessionStorage());
   }
 
   getLikesWishList(): Observable<number[]> {
-    const userId = sessionStorage.getItem('ID');
-    return this.http.get<number[]>(this.baseUrl + '/get-likes/' + userId);
+    return this.http.get<number[]>(this.baseUrl + '/get-likes/' + this.userService.getUserIdFromSessionStorage());
   }
 
   addLikeToWishlist(productId: number, userId: number): Subscription {

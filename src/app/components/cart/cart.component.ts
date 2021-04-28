@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MessengerService} from '../../messengers/messenger.service';
 import {CartService} from './cart.service';
+import {UserService} from '../edit-user/user.service';
 
 @Component({
   selector: 'app-cart',
@@ -11,7 +12,10 @@ export class CartComponent implements OnInit {
   cartItems = [];
   cartTotal = 0;
 
-  constructor(private messengerService: MessengerService, private cartService: CartService) {
+  constructor(private messengerService: MessengerService,
+              private cartService: CartService,
+              private userService: UserService
+  ) {
   }
 
   ngOnInit(): void {
@@ -22,7 +26,7 @@ export class CartComponent implements OnInit {
   }
 
   getAllCartProducts(): void {
-    this.cartService.getCartProducts(Number(sessionStorage.getItem('ID'))).subscribe(value => {
+    this.cartService.getCartProducts(this.userService.getUserIdFromSessionStorage()).subscribe(value => {
       this.cartItems = value;
       this.cartService.cartQuantityEmitter.emit(this.cartItems.length);
       this.cartTotal = 0;

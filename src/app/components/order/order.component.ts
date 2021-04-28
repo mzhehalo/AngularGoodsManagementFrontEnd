@@ -3,6 +3,7 @@ import {OrderModel} from '../../model/OrderModel';
 import {ActivatedRoute} from '@angular/router';
 import {OrderService} from './order.service';
 import {MessengerService} from '../../messengers/messenger.service';
+import {UserService} from '../edit-user/user.service';
 
 @Component({
   selector: 'app-order',
@@ -17,7 +18,8 @@ export class OrderComponent implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               private orderService: OrderService,
-              private messenger: MessengerService
+              private messenger: MessengerService,
+              private userService: UserService
   ) {
     this.orderList = activatedRoute.snapshot.data.Orders;
   }
@@ -30,7 +32,7 @@ export class OrderComponent implements OnInit {
   }
 
   getAllOrders(): void {
-    this.orderService.getOrdersBySeller(Number(sessionStorage.getItem('ID'))).subscribe(orders => {
+    this.orderService.getOrdersBySeller(this.userService.getUserIdFromSessionStorage()).subscribe(orders => {
       this.orderService.orderQuantityEmitter.emit(orders.length);
       this.orderList = orders;
     });

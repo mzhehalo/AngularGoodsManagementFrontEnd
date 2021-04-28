@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AddProductService} from './add-product.service';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
+import {UserService} from '../edit-user/user.service';
 
 @Component({
   selector: 'app-add-product',
@@ -11,7 +12,7 @@ import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categor
 export class AddProductComponent implements OnInit {
 
   addProductForm: FormGroup;
-  id: string;
+  id: number;
   mainCategory = 'main category';
   subCategory = 'sub category';
 
@@ -20,7 +21,8 @@ export class AddProductComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,
               private addProductService: AddProductService,
-              private dropDownMenuService: DropdownCategoriesService
+              private dropDownMenuService: DropdownCategoriesService,
+              private userService: UserService
   ) {
     this.addProductForm = formBuilder.group({
       productName: ['', [Validators.required]],
@@ -33,6 +35,7 @@ export class AddProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.id = this.userService.getUserIdFromSessionStorage();
     this.dropDownMenuService.mainCategoryEmitter.subscribe(data => {
       this.mainCategory = data;
     });
@@ -42,7 +45,6 @@ export class AddProductComponent implements OnInit {
   }
 
   addProduct(): void {
-    this.id = sessionStorage.getItem('ID');
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
     formData.append('mainCategory', this.mainCategory);
@@ -51,7 +53,7 @@ export class AddProductComponent implements OnInit {
     formData.append('productDescription', this.addProductForm.value.productDescription);
     formData.append('productBrand', this.addProductForm.value.productBrand);
     formData.append('productPrice', this.addProductForm.value.productPrice);
-    formData.append('sellerId', Number(this.id).toString());
+    formData.append('sellerId', this.id.toString());
     this.addProductService.addProduct(formData).subscribe(value => {
     });
   }

@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from '@angular/forms';
 import {MessengerService} from '../../messengers/messenger.service';
+import {FilterService} from './filter.service';
 
 @Component({
   selector: 'app-filters',
@@ -13,22 +14,23 @@ export class FiltersComponent implements OnInit {
   priceMaxPossible: number;
 
   constructor(private formBuilder: FormBuilder,
-              private messengerService: MessengerService
+              private messengerService: MessengerService,
+              private filterService: FilterService
   ) {
     this.filterGroup = formBuilder.group({
-      filterFrom: [Number(sessionStorage.getItem('priceMinPossible')), [Validators.required]],
-      filterTo: [Number(sessionStorage.getItem('priceMaxPossible')), [Validators.required]]
+      filterFrom: [this.filterService.getPriceMinPossible(), [Validators.required]],
+      filterTo: [this.filterService.getPriceMaxPossible(), [Validators.required]]
     });
   }
 
   ngOnInit(): void {
-    this.priceMinPossible = Number(sessionStorage.getItem('priceMinPossible'));
-    this.priceMaxPossible = Number(sessionStorage.getItem('priceMaxPossible'));
+    this.priceMinPossible = this.filterService.getPriceMinPossible();
+    this.priceMaxPossible = this.filterService.getPriceMaxPossible();
   }
 
   filterPrice(): void {
-    sessionStorage.setItem('priceMin', this.filterGroup.value.filterFrom);
-    sessionStorage.setItem('priceMax', this.filterGroup.value.filterTo);
+    this.filterService.setPriceMin(this.filterGroup.value.filterFrom);
+    this.filterService.setPriceMax(this.filterGroup.value.filterTo);
     this.messengerService.sendMessageFilter();
   }
 }

@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CartModel} from '../../../model/CartModel';
-import {AuthService} from '../../login/auth.service';
 import {Router} from '@angular/router';
 import {CartService} from '../cart.service';
 import {MessengerService} from '../../../messengers/messenger.service';
+import {UserService} from '../../edit-user/user.service';
 
 @Component({
   selector: 'app-cart-item',
@@ -16,8 +16,9 @@ export class CartItemComponent implements OnInit {
   cartItem: CartModel;
   role: string;
   currentUrl: string;
+  userId: number;
 
-  constructor(private authService: AuthService,
+  constructor(private userService: UserService,
               private router: Router,
               private cartService: CartService,
               private message: MessengerService
@@ -25,14 +26,15 @@ export class CartItemComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.getUserDetails().subscribe(data => {
+    this.userId = this.userService.getUserIdFromSessionStorage();
+    this.userService.getUserDetails(this.userId).subscribe(data => {
       this.role = data.role;
     });
     this.currentUrl = this.router.url;
   }
 
   deleteFromCart(): void {
-    this.cartService.deleteFromCart(Number(sessionStorage.getItem('ID')), this.cartItem.product.id)
+    this.cartService.deleteFromCart(this.userId, this.cartItem.product.id)
       .subscribe(value => {
         this.message.sendMessageCart();
       });

@@ -20,7 +20,7 @@ export class EditCategoriesComponent implements OnInit {
 
   @ViewChild(MatTable, {static: true}) table: MatTable<any>;
 
-  constructor(public dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private editCategoriesService: EditCategoriesService,
               private messengerService: MessengerService
   ) {

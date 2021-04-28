@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../login/auth.service';
 import {UserModel} from '../../model/UserModel';
 import {ActivatedRoute, Router} from '@angular/router';
-import {EditUserService} from './edit-user.service';
+import {UserService} from './user.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -13,15 +13,16 @@ import {EditUserService} from './edit-user.service';
 export class EditUserComponent implements OnInit {
   user: UserModel;
   editUserForm: any;
-  emailFromStorage: string;
   passwordMatch = false;
   isEmailExist: string;
+  role: string;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
-              private editService: EditUserService,
-              private router: Router
+              private editService: UserService,
+              private router: Router,
+              private userService: UserService
   ) {
     this.user = activatedRoute.snapshot.data.User;
     this.editUserForm = this.formBuilder.group({
@@ -41,19 +42,26 @@ export class EditUserComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.role = this.userService.getRoleFromSessionStorage();
   }
 
   editUser(): void {
-    this.emailFromStorage = sessionStorage.getItem('Email');
     this.editService.editUser({
       firstName: this.editUserForm.value.firstName,
       lastName: this.editUserForm.value.lastName,
       email: this.editUserForm.value.email,
       password: this.editUserForm.value.password
-    }, this.emailFromStorage).subscribe(value => {
+    }, this.activatedRoute.snapshot.params.userId).subscribe(value => {
       }, error => {
-        this.authService.logout();
-        this.router.navigateByUrl('');
+        if (this.role !== 'ROLE_ADMIN') {
+          this.authService.logout();
+          this.router.navigateByUrl('login');
+        } else {
+          if (error.error !== 'Email already exist') {
+            this.router.navigateByUrl(this.userService.getFirstNameFromSessionStorage() + '/edit/users');
+          }
+        }
+
         if (error.error === 'Email already exist') {
           this.isEmailExist = error.error;
         } else {

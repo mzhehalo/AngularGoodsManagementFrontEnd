@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {OrderModel} from '../../../../model/OrderModel';
 import {OrderService} from '../../order.service';
 import {MessengerService} from '../../../../messengers/messenger.service';
+import {UserService} from '../../../edit-user/user.service';
 
 @Component({
   selector: 'app-order-item',
@@ -14,7 +15,8 @@ export class OrderItemComponent implements OnInit {
   order: OrderModel;
 
   constructor(private orderService: OrderService,
-              private messenger: MessengerService
+              private messenger: MessengerService,
+              private userService: UserService
   ) {
   }
 
@@ -22,7 +24,7 @@ export class OrderItemComponent implements OnInit {
   }
 
   deleteOrder(orderId: number): void {
-    this.orderService.deleteOrder(Number(sessionStorage.getItem('ID')), orderId).subscribe(data => {
+    this.orderService.deleteOrder(this.userService.getUserIdFromSessionStorage(), orderId).subscribe(data => {
       this.messenger.sendMessageOrder();
     }, error => {
       console.log(error);

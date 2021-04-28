@@ -2,31 +2,20 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserModel} from '../../model/UserModel';
 import {HttpClient} from '@angular/common/http';
 import {map} from 'rxjs/operators';
-import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
+import {UserService} from '../edit-user/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private baseUrl = 'http://localhost:8100';
-
-  USER_EMAIL = 'Email';
-  USER_NAME_SESSION_ID = 'ID';
-  USER_NAME_SESSION_ATTRIBUTE_NAME = 'authenticatedUser';
-  USER_NAME_SESSION_FIRST_NAME = 'FirstName';
-  USER_NAME_SESSION_ROLE = 'ROLE';
-  USER_FILTER_PRICE_MIN = 'priceMin';
-  USER_FILTER_PRICE_MAX = 'priceMax';
-  USER_FILTER_PRICE_MIN_POSSIBLE = 'priceMinPossible';
-  USER_FILTER_PRICE_MAX_POSSIBLE = 'priceMaxPossible';
   @Output() loggedInEmitter: EventEmitter<boolean> = new EventEmitter();
-  @Output() loggedInEmitterUserFirstName: EventEmitter<string> = new EventEmitter();
-  @Output() loggedInEmitterUserRole: EventEmitter<string> = new EventEmitter();
+  @Output() loggedInEmitterUser: EventEmitter<UserModel> = new EventEmitter();
 
   constructor(private httpClient: HttpClient,
-              private http: HttpClient,
-              private route: Router,
+              private router: Router,
+              private userService: UserService
   ) {
   }
 
@@ -45,41 +34,35 @@ export class AuthService {
   }
 
   registerSuccessfulLogin(email: string, password: string): void {
-    sessionStorage.setItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME, `Basic ${btoa(email + ':' + password)}`);
-    sessionStorage.setItem(this.USER_EMAIL, email);
+    this.userService.setAuthenticateNameToSessionStorage(`Basic ${btoa(email + ':' + password)}`);
+    this.userService.setEmailToSessionStorage(email);
   }
 
   setUserToSessionStorage(): void {
-    this.getUserDetails().subscribe(user => {
-      sessionStorage.setItem(this.USER_NAME_SESSION_ID, String(user.id));
-      sessionStorage.setItem(this.USER_NAME_SESSION_ROLE, user.role);
-      sessionStorage.setItem(this.USER_NAME_SESSION_FIRST_NAME, user.firstName);
-      this.loggedInEmitterUserRole.emit(user.role);
-      this.loggedInEmitterUserFirstName.emit(user.firstName);
+    this.userService.getUserDetailsByEmail(this.userService.getEmailFromSessionStorage()).subscribe(user => {
+      this.loggedInEmitterUser.emit(user);
+      this.userService.setUserIdToSessionStorage(String(user.id));
+      this.userService.setRoleToSessionStorage(user.role);
+      this.userService.setFirstNameToSessionStorage(user.firstName);
+      this.router.navigate(['', this.userService.getFirstNameFromSessionStorage()]).then(data => {
+      });
     });
   }
 
   logout(): void {
     sessionStorage.clear();
     this.loggedInEmitter.emit(false);
-    this.loggedInEmitterUserRole.emit(null);
-    this.route.navigateByUrl('login');
+    this.loggedInEmitterUser.emit(new UserModel());
+    this.router.navigateByUrl('login').then(data => {
+    });
   }
 
   isUserLoggedIn(): boolean {
-    const user = sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
+    const user = this.userService.getAuthenticateNameFromSessionStorage();
     return user !== null;
   }
 
   getBasicAuth(): string {
-    return sessionStorage.getItem(this.USER_NAME_SESSION_ATTRIBUTE_NAME);
-  }
-
-  getFirstNameFromSessionStorage(): string {
-    return sessionStorage.getItem(this.USER_NAME_SESSION_FIRST_NAME);
-  }
-
-  getUserDetails(): Observable<UserModel> {
-    return this.http.post<UserModel>(this.baseUrl + '/user/get', sessionStorage.getItem(this.USER_EMAIL));
+    return this.userService.getAuthenticateNameFromSessionStorage();
   }
 }

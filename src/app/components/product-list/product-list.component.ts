@@ -4,6 +4,8 @@ import {ProductService} from './product.service';
 import {WishlistService} from '../wishlist/wishlist.service';
 import {ActivatedRoute} from '@angular/router';
 import {MessengerService} from '../../messengers/messenger.service';
+import {UserService} from '../edit-user/user.service';
+import {FilterService} from '../filters/filter.service';
 
 @Component({
   selector: 'app-product-list',
@@ -23,7 +25,8 @@ export class ProductListComponent implements OnInit {
   constructor(private wishlistService: WishlistService,
               private activatedRoute: ActivatedRoute,
               private productService: ProductService,
-              private messengerService: MessengerService
+              private messengerService: MessengerService,
+              private filterService: FilterService
   ) {
   }
 
@@ -43,8 +46,8 @@ export class ProductListComponent implements OnInit {
     });
 
     this.messengerService.getMessageFilter().subscribe(mess => {
-      this.priceMin = Number(sessionStorage.getItem('priceMin'));
-      this.priceMax = Number(sessionStorage.getItem('priceMax'));
+      this.priceMin = this.filterService.getPriceMin();
+      this.priceMax = this.filterService.getPriceMax();
       this.loadProducts(1, 6);
     });
   }

@@ -4,6 +4,8 @@ import {Router} from '@angular/router';
 import {WishlistService} from '../wishlist/wishlist.service';
 import {CartService} from '../cart/cart.service';
 import {OrderService} from '../order/order.service';
+import {UserService} from '../edit-user/user.service';
+import {UserModel} from '../../model/UserModel';
 
 @Component({
   selector: 'app-header',
@@ -11,23 +13,34 @@ import {OrderService} from '../order/order.service';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  firstName: string;
   isLoggedIn: any;
-  role: string;
   wishlistQuantity: number;
   cartQuantity: number;
   ordersQuantity: number;
+  user: UserModel = new UserModel();
 
   constructor(private authService: AuthService,
               private router: Router,
               private wishlistService: WishlistService,
               private cartService: CartService,
-              private orderService: OrderService
+              private orderService: OrderService,
+              private userService: UserService
   ) {
   }
 
   ngOnInit(): void {
-    this.role = sessionStorage.getItem('ROLE');
+    this.user.firstName = this.userService.getFirstNameFromSessionStorage();
+    this.user.role = this.userService.getRoleFromSessionStorage();
+
+    this.authService.loggedInEmitterUser.subscribe(userEmitter => {
+      this.user = userEmitter;
+    });
+    this.authService.loggedInEmitter.subscribe((data: boolean) => this.isLoggedIn = data);
+
+    if (this.authService.isUserLoggedIn()) {
+      this.authService.loggedInEmitter.emit(true);
+    }
+
     this.cartService.cartQuantityEmitter.subscribe(cartQuantityEm => {
       this.cartQuantity = cartQuantityEm;
     });
@@ -37,14 +50,6 @@ export class HeaderComponent implements OnInit {
     this.orderService.orderQuantityEmitter.subscribe(ordersQuantity => {
       this.ordersQuantity = ordersQuantity;
     });
-    this.firstName = this.authService.getFirstNameFromSessionStorage();
-    this.authService.loggedInEmitterUserFirstName.subscribe(data => this.firstName = data);
-    this.authService.loggedInEmitterUserRole.subscribe(data => this.role = data);
-    this.authService.loggedInEmitter.subscribe((data: boolean) => this.isLoggedIn = data);
-
-    if (this.authService.isUserLoggedIn()) {
-      this.authService.loggedInEmitter.emit(true);
-    }
   }
 
   handleLogout(): void {
@@ -52,16 +57,14 @@ export class HeaderComponent implements OnInit {
   }
 
   routerMainPage(): void {
-    this.firstName = this.authService.getFirstNameFromSessionStorage();
-    if (this.router.url === '/' + this.firstName) {
+    if (this.router.url === '/' + this.user.firstName) {
       window.location.reload();
     } else {
-      this.router.navigateByUrl(this.firstName);
+      this.router.navigateByUrl(this.user.firstName);
     }
   }
 
   routerEditProduct(): void {
-    this.firstName = this.authService.getFirstNameFromSessionStorage();
-    this.router.navigateByUrl(this.firstName + '/add-product');
+    this.router.navigateByUrl(this.user.firstName + '/add-product');
   }
 }

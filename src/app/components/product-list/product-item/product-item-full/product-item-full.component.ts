@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ProductModel} from '../../../../model/ProductModel';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../../../login/auth.service';
 import {ProductListComponent} from '../../product-list.component';
 import {ProductService} from '../../product.service';
 import {WishlistService} from '../../../wishlist/wishlist.service';
 import {DomSanitizer} from '@angular/platform-browser';
+import {UserService} from '../../../edit-user/user.service';
 
 @Component({
   selector: 'app-product-item-full',
@@ -15,12 +15,13 @@ import {DomSanitizer} from '@angular/platform-browser';
 export class ProductItemFullComponent implements OnInit {
   product: ProductModel;
   role: string;
-  firstNameFromStorage: string;
+  firstName: string;
   wishListBoolean: boolean;
   wishListArr: number[];
+  userId: number;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private authService: AuthService,
+              private userService: UserService,
               private productList: ProductListComponent,
               private productService: ProductService,
               private router: Router,
@@ -32,10 +33,13 @@ export class ProductItemFullComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userId = this.userService.getUserIdFromSessionStorage();
+    this.firstName = this.userService.getFirstNameFromSessionStorage();
+
     this.wishlistService.wishlistItemEmitter.subscribe(data => {
       this.wishListBoolean = data;
     });
-    this.authService.getUserDetails().subscribe(data => this.role = data.role);
+    this.userService.getUserDetails(this.userId).subscribe(data => this.role = data.role);
     this.loadWishlist();
   }
 
@@ -45,19 +49,18 @@ export class ProductItemFullComponent implements OnInit {
   }
 
   deleteProduct(): void {
-    this.firstNameFromStorage = sessionStorage.getItem('FirstName');
     this.productService.deleteProduct(this.product.id).subscribe(value => {
-      this.router.navigateByUrl('/' + (this.firstNameFromStorage).toString());
+      this.router.navigateByUrl('/' + this.firstName);
     });
   }
 
   addToWishlist(): void {
-    this.wishlistService.addLikeToWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.addLikeToWishlist(this.product.id, this.userId);
     this.wishListBoolean = true;
   }
 
   deleteFromWishlist(): void {
-    this.wishlistService.deleteLikeFromWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.deleteLikeFromWishlist(this.product.id, this.userId);
     this.wishListBoolean = false;
   }
 

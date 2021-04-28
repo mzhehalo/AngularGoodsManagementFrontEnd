@@ -25,6 +25,7 @@ import {WishlistProductsResolverService} from './service-resolvers/wishlist-prod
 import {EditCategoriesComponent} from './components/edit-categories/edit-categories.component';
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {EditUsersComponent} from './components/edit-users/edit-users.component';
+import {UsersResolverService} from './service-resolvers/users-resolver.service';
 
 
 const routes: Routes = [
@@ -33,10 +34,14 @@ const routes: Routes = [
     {
       path: ':firstName', children: [
         {path: '', component: MainComponent, resolve: {Products: ProductsResolverService}},
-        {path: 'category', children: [
-            {path: ':mainCategory/:subCategory', component: MainComponent,
-              resolve: {CategoryProducts: ProductsCategoryResolverService}},
-          ]},
+        {
+          path: 'category', children: [
+            {
+              path: ':mainCategory/:subCategory', component: MainComponent,
+              resolve: {CategoryProducts: ProductsCategoryResolverService}
+            },
+          ]
+        },
         {
           path: 'full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
@@ -72,7 +77,7 @@ const routes: Routes = [
           }
         },
         {path: 'profile', component: ProfileMenuComponent},
-        {path: 'edit-user', component: EditUserComponent, resolve: {User: UserResolverService}},
+        {path: 'edit-user/:userId', component: EditUserComponent, resolve: {User: UserResolverService}},
         {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product: ProductResolverService}},
         {
           path: 'full-product/:id/edit-product', component: EditProductComponent,
@@ -99,7 +104,12 @@ const routes: Routes = [
           path: 'statistics', component: StatisticsComponent
         },
         {
-          path: 'edit/users', component: EditUsersComponent
+          path: 'edit/users', component: EditUsersComponent, resolve: {
+            Users: UsersResolverService
+          }
+        },
+        {
+          path: 'edit/users/register', component: RegisterComponent
         }
       ],
     }

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {AuthService} from '../login/auth.service';
 import {OrderService} from '../order/order.service';
+import {UserService} from '../edit-user/user.service';
 
 @Component({
   selector: 'app-main',
@@ -12,17 +12,19 @@ export class MainComponent implements OnInit {
   role: string;
   isCategory: boolean;
   ordersQuantity: number;
+  userId: number;
 
-  constructor(private authService: AuthService,
+  constructor(private userService: UserService,
               private activatedRoute: ActivatedRoute,
               private orderService: OrderService
   ) {
   }
 
   ngOnInit(): void {
+    this.userId = this.userService.getUserIdFromSessionStorage();
     this.getAllOrders();
     this.isCategory = this.activatedRoute.snapshot.url[0] !== undefined;
-    this.authService.getUserDetails().subscribe(data => {
+    this.userService.getUserDetails(this.userId).subscribe(data => {
       this.role = data.role;
     });
 
@@ -32,7 +34,7 @@ export class MainComponent implements OnInit {
   }
 
   getAllOrders(): void {
-    this.orderService.getOrdersBySeller(Number(sessionStorage.getItem('ID'))).subscribe(orders => {
+    this.orderService.getOrdersBySeller(this.userId).subscribe(orders => {
       this.orderService.orderQuantityEmitter.emit(orders.length);
     });
   }

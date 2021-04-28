@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from '../login/auth.service';
-import {EditUserService} from '../edit-user/edit-user.service';
+import {UserService} from '../edit-user/user.service';
 import {ConfirmationDialogService} from '../confirmation-dialog/confirmation-dialog.service';
+import {UserModel} from '../../model/UserModel';
 
 @Component({
   selector: 'app-profile-menu',
@@ -9,31 +10,26 @@ import {ConfirmationDialogService} from '../confirmation-dialog/confirmation-dia
   styleUrls: ['./profile-menu.component.css']
 })
 export class ProfileMenuComponent implements OnInit {
-  user: string;
-  role: string;
+  user: UserModel = new UserModel();
 
   constructor(private authService: AuthService,
-              private editUserService: EditUserService,
-              private confirmationDialogService: ConfirmationDialogService
+              private editUserService: UserService,
+              private confirmationDialogService: ConfirmationDialogService,
+              private userService: UserService
   ) {
   }
 
   ngOnInit(): void {
-    this.user = sessionStorage.getItem('FirstName');
-    this.role = sessionStorage.getItem('ROLE');
-    this.authService.loggedInEmitterUserFirstName.subscribe(firstName => {
-      this.user = firstName;
-      console.log(firstName);
-    }, error => {
-      console.log(error);
-    });
+    this.user.firstName = this.userService.getFirstNameFromSessionStorage();
+    this.user.id = this.userService.getUserIdFromSessionStorage();
+    this.user.role = this.userService.getRoleFromSessionStorage();
+
+    this.authService.loggedInEmitterUser.subscribe(userEmitter => this.user = userEmitter);
   }
 
   openConfirmationDialog(): void {
-    const userId = Number(sessionStorage.getItem('ID'));
-
     this.confirmationDialogService.confirm('Please confirm action', 'Do you really want to delete your account ?')
-      .then((confirmed) => this.deleteUser(userId))
+      .then((confirmed) => this.deleteUser(this.user.id))
       .catch(() => console.log('User dismissed the dialog (e.g., by using ESC, clicking the cross icon, or clicking outside the dialog)'));
   }
 

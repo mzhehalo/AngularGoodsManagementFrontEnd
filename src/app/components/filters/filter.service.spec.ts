@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { EditUserService } from './edit-user.service';
+import { FilterService } from './filter.service';
 
-describe('EditUserService', () => {
-  let service: EditUserService;
+describe('FilterService', () => {
+  let service: FilterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(EditUserService);
+    service = TestBed.inject(FilterService);
   });
 
   it('should be created', () => {

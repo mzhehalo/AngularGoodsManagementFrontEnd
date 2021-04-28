@@ -1,12 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ProductModel} from '../../../model/ProductModel';
-import {AuthService} from '../../login/auth.service';
 import {ProductService} from '../product.service';
 import {Router} from '@angular/router';
 import {WishlistService} from '../../wishlist/wishlist.service';
 import {CartService} from '../../cart/cart.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MessengerService} from '../../../messengers/messenger.service';
+import {UserService} from '../../edit-user/user.service';
 
 @Component({
   selector: 'app-product-item',
@@ -19,8 +19,9 @@ export class ProductItemComponent implements OnInit {
   role: string;
   @Input()
   wishListBoolean: boolean;
+  userId: number;
 
-  constructor(private authService: AuthService,
+  constructor(private userService: UserService,
               private productService: ProductService,
               private router: Router,
               private wishlistService: WishlistService,
@@ -30,7 +31,8 @@ export class ProductItemComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.authService.getUserDetails().subscribe(data => {
+    this.userId = this.userService.getUserIdFromSessionStorage();
+    this.userService.getUserDetails(this.userId).subscribe(data => {
       this.role = data.role;
     });
   }
@@ -41,7 +43,7 @@ export class ProductItemComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.cartService.addToCart(Number(sessionStorage.getItem('ID')), this.product.id);
+    this.cartService.addToCart(this.userId, this.product.id);
   }
 
   deleteProduct(): void {
@@ -51,12 +53,12 @@ export class ProductItemComponent implements OnInit {
   }
 
   addToWishlist(): void {
-    this.wishlistService.addLikeToWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.addLikeToWishlist(this.product.id, this.userId);
     this.wishListBoolean = !this.wishListBoolean;
   }
 
   deleteFromWishlist(): void {
-    this.wishlistService.deleteLikeFromWishlist(this.product.id, Number(sessionStorage.getItem('ID')));
+    this.wishlistService.deleteLikeFromWishlist(this.product.id, this.userId);
     this.wishListBoolean = !this.wishListBoolean;
   }
 

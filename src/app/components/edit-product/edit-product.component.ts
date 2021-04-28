@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ProductModel} from '../../model/ProductModel';
 import {EditProductService} from './edit-product.service';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
+import {UserService} from '../edit-user/user.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -27,7 +28,8 @@ export class EditProductComponent implements OnInit {
               private activatedRoute: ActivatedRoute,
               private editProductService: EditProductService,
               private router: Router,
-              private dropDownMenuService: DropdownCategoriesService
+              private dropDownMenuService: DropdownCategoriesService,
+              private userService: UserService
   ) {
     this.product = activatedRoute.snapshot.data.Product;
     this.editProductForm = this.formBuilder.group({
@@ -44,6 +46,7 @@ export class EditProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.firstNameFromStorage = this.userService.getFirstNameFromSessionStorage();
     this.dropDownMenuService.mainCategoryEmitter.subscribe(data => {
       this.mainCategory = data;
     });
@@ -53,7 +56,6 @@ export class EditProductComponent implements OnInit {
   }
 
   editProduct(): void {
-    this.firstNameFromStorage = sessionStorage.getItem('FirstName');
     const formData = new FormData();
     formData.append('file', this.selectedFile, this.selectedFile.name);
     formData.append('mainCategory', this.mainCategory);
