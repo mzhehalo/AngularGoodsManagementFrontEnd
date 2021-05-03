@@ -51,7 +51,7 @@
       <a class="nav-item nav-link text-decoration-none text-light"
          [routerLink]="[user.firstName + '/edit/users']">Users</a>
     </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_ADMIN'">
+    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_ADMIN' || user.role === 'ROLE_SELLER'">
       <a class="nav-item nav-link text-decoration-none text-light"
          [routerLink]="[user.firstName + '/statistics']">Statistics</a>
     </li>

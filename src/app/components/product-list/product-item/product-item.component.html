@@ -11,11 +11,13 @@
         <button type="button" class="btn btn-sm btn-outline-primary" [routerLink]="'full-product/' + product.id">
           View
         </button>
-        <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="role === 'ROLE_SELLER'"
+        <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="role === 'ROLE_ADMIN' ||
+        role === 'ROLE_SELLER' && product.productSeller.id === userId"
                 [routerLink]="'edit-product/' + product.id">
           Edit
         </button>
-        <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="role === 'ROLE_SELLER'"
+        <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="role === 'ROLE_ADMIN' ||
+        role === 'ROLE_SELLER' && product.productSeller.id === userId"
                 (click)="deleteProduct()">
           Delete
         </button>

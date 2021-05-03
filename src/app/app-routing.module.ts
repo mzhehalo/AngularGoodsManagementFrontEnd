@@ -26,6 +26,7 @@ import {EditCategoriesComponent} from './components/edit-categories/edit-categor
 import {StatisticsComponent} from './components/statistics/statistics.component';
 import {EditUsersComponent} from './components/edit-users/edit-users.component';
 import {UsersResolverService} from './service-resolvers/users-resolver.service';
+import {StatisticsResolverService} from './service-resolvers/statistics-resolver.service';
 
 
 const routes: Routes = [
@@ -101,7 +102,9 @@ const routes: Routes = [
           path: 'edit/categories', component: EditCategoriesComponent
         },
         {
-          path: 'statistics', component: StatisticsComponent
+          path: 'statistics', component: StatisticsComponent, resolve: {
+            Statistics: StatisticsResolverService
+          }
         },
         {
           path: 'edit/users', component: EditUsersComponent, resolve: {

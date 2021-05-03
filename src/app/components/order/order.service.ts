@@ -2,12 +2,13 @@ import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {OrderModel} from '../../model/OrderModel';
 import {Observable} from 'rxjs';
+import {Constants} from '../../config/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
-  private baseUrl = 'http://localhost:8100/order-info';
+  private baseUrl = Constants.API_BASE_URL + 'order-info/';
   @Output()
   orderQuantityEmitter: EventEmitter<number> = new EventEmitter<number>();
 
@@ -16,14 +17,14 @@ export class OrderService {
   }
 
   getOrdersBySeller(sellerId: number): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(this.baseUrl + '/get/orders/' + sellerId);
+    return this.http.get<OrderModel[]>(this.baseUrl + 'get/orders/' + sellerId);
   }
 
   getOrderBySellerAndOrderId(sellerId: number, orderId: number): Observable<OrderModel> {
-    return this.http.get<OrderModel>(this.baseUrl + '/get/order/' + sellerId + '/' + orderId );
+    return this.http.get<OrderModel>(this.baseUrl + 'get/order/' + sellerId + '/' + orderId );
   }
 
   deleteOrder(sellerId: number, orderId: number): Observable<{}> {
-    return this.http.delete(this.baseUrl + '/delete/' + sellerId + '/' + orderId);
+    return this.http.delete(this.baseUrl + 'delete/' + sellerId + '/' + orderId);
   }
 }

@@ -3,12 +3,13 @@ import {OrderModel} from '../../model/OrderModel';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {UserService} from '../edit-user/user.service';
+import {Constants} from '../../config/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartFullService {
-  private baseUrl = 'http://localhost:8100';
+  private baseUrl = Constants.API_BASE_URL + 'order-info/';
 
   constructor(private http: HttpClient,
               private userService: UserService
@@ -16,6 +17,6 @@ export class CartFullService {
 
   placeOrder(customerOrder: OrderModel): Observable<OrderModel> {
     const customerId = this.userService.getUserIdFromSessionStorage();
-    return this.http.post<OrderModel>(this.baseUrl + '/order-info/add/' + customerId , customerOrder);
+    return this.http.post<OrderModel>(this.baseUrl + 'add/' + customerId , customerOrder);
   }
 }

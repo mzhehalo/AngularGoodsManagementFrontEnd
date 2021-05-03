@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {MainCategoryModel} from '../../model/main-category-model';
+import {Constants} from '../../config/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EditCategoriesService {
 
-  private baseUrl = 'http://localhost:8100/categories';
+  private baseUrl = Constants.API_BASE_URL + 'categories';
 
   constructor(private http: HttpClient) {
   }

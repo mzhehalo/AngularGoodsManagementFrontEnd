@@ -4,12 +4,13 @@ import {Observable} from 'rxjs';
 import {Router} from '@angular/router';
 import {ProductPageModel} from '../../model/ProductPageModel';
 import {UserService} from '../edit-user/user.service';
+import {Constants} from '../../config/constants';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DropdownCategoriesService {
-  private baseUrl = 'http://localhost:8100/product/category';
+  private baseUrl = Constants.API_BASE_URL + 'product/';
   @Output()
   mainCategoryEmitter: EventEmitter<string> = new EventEmitter<string>();
   subCategoryEmitter: EventEmitter<string> = new EventEmitter<string>();
@@ -17,7 +18,7 @@ export class DropdownCategoriesService {
   constructor(private http: HttpClient,
               private router: Router,
               private userService: UserService
-              ) {
+  ) {
   }
 
   passCategory(mainCategory: string, subCategory: string, componentName: string): void {
@@ -29,7 +30,9 @@ export class DropdownCategoriesService {
     }
   }
 
-  getProductsByCategory(mainCategory: string, subCategory: string, currentPage: number, size: number): Observable<ProductPageModel> {
-    return this.http.get<ProductPageModel>(this.baseUrl + '/' + mainCategory + '/' + subCategory + '/' + currentPage + '/' + size);
+  getProductsByCategory(mainCategory: string, subCategory: string, currentPage: number, size: number):
+    Observable<ProductPageModel> {
+    return this.http.get<ProductPageModel>(this.baseUrl + 'category/' + mainCategory + '/' + subCategory +
+      '/' + currentPage + '/' + size);
   }
 }

@@ -11,10 +11,10 @@ export class OrderItemFullComponent implements OnInit {
   order: OrderModel;
 
   constructor(private activatedRoute: ActivatedRoute) {
-    this.order = activatedRoute.snapshot.data.Order;
   }
 
   ngOnInit(): void {
+    this.order = this.activatedRoute.snapshot.data.Order;
   }
 
 }

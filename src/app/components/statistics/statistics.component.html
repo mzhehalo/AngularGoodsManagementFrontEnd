@@ -1,1 +1,55 @@
-<p>statistics works!</p>
+<div class="container">
+
+  <h3 class="text-center mt-4 mb-5">Statistics</h3>
+
+  <table *ngIf="role == 'ROLE_SELLER'" class="mat-elevation-z8 w-100 p-3 mb-5">
+    <thead>
+    <tr>
+      <th *ngFor="let data of displayedColumns">{{data}}</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+      <th>
+        {{dataSource.quantityOrders}}
+      </th>
+      <th>
+        {{dataSource.sumPriceOrdered | currency: 'UAH'}}
+      </th>
+      <th>
+        {{dataSource.numberOfProducts}}
+      </th>
+      <th>
+        {{dataSource.sumPrice | currency: 'UAH'}}
+      </th>
+    </tr>
+    </tbody>
+  </table>
+
+  <table *ngIf="role == 'ROLE_ADMIN'" class="mat-elevation-z8 w-100 p-3 mb-5">
+    <thead>
+    <tr>
+      <th *ngFor="let data of displayedColumnsAdmin">{{data}}</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr>
+      <th>
+        {{dataSource.quantityOrdersAll}}
+      </th>
+      <th>
+        {{dataSource.sumPriceOrderedAll | currency: 'UAH'}}
+      </th>
+      <th>
+        {{dataSource.numberOfProductsAll}}
+      </th>
+      <th>
+        {{dataSource.sumPriceAll | currency: 'UAH'}}
+      </th>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
