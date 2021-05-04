@@ -13,7 +13,7 @@ import {WishlistService} from '../wishlist/wishlist.service';
 export class CartFullComponent implements OnInit {
   cartQuantity: number;
   shippingInformation: FormGroup;
-  paymentOrderBoolean: boolean;
+  isPaid: boolean;
 
   constructor(private cartService: CartService,
               private formBuilder: FormBuilder,
@@ -25,13 +25,20 @@ export class CartFullComponent implements OnInit {
       customerName: ['', [Validators.required]],
       customerAddress: ['', [Validators.required]],
       customerCountry: ['', [Validators.required]],
-      customerNumber: ['', [Validators.required]],
+      customerNumber: ['', [Validators.required, Validators.pattern('^((\\+91-?)|0)?[0-9]{10}$')]],
+      isPaid: ['', [Validators.requiredTrue]],
+      isCartEmpty: ['', [Validators.requiredTrue]]
     });
   }
 
   ngOnInit(): void {
     this.cartService.cartQuantityEmitter.subscribe(value => {
       this.cartQuantity = value;
+      if (value > 0) {
+        this.shippingInformation.controls.isCartEmpty.setValue(true);
+      } else {
+        this.shippingInformation.controls.isCartEmpty.setValue(false);
+      }
     });
     this.loadWishlist();
   }
@@ -42,14 +49,17 @@ export class CartFullComponent implements OnInit {
       customerAddress: this.shippingInformation.value.customerAddress,
       customerCountry: this.shippingInformation.value.customerCountry,
       customerNumber: this.shippingInformation.value.customerNumber,
-      paid: this.paymentOrderBoolean
+      paid: this.isPaid
     }).subscribe(value => {
+    }, error => {
+      console.log(error);
       this.message.sendMessageCart();
     });
   }
 
-  paid(): void {
-    this.paymentOrderBoolean = !this.paymentOrderBoolean;
+  paid(isPaid: boolean): void {
+    this.shippingInformation.controls.isPaid.setValue(isPaid);
+    this.isPaid = isPaid;
   }
 
   loadWishlist(): void {

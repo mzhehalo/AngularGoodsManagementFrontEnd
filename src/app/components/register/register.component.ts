@@ -27,7 +27,7 @@ export class RegisterComponent implements OnInit {
     }, {validators: this.password.bind(this)});
   }
 
-  password(formGroup: FormGroup): any {
+  password(formGroup: FormGroup): boolean {
     const {value: password} = formGroup.get('password');
     const {value: confirmPassword} = formGroup.get('confirmPassword');
     return password === confirmPassword ? this.passwordMatch = true : this.passwordMatch = false;

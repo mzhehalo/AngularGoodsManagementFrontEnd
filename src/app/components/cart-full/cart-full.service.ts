@@ -15,8 +15,8 @@ export class CartFullService {
               private userService: UserService
               ) { }
 
-  placeOrder(customerOrder: OrderModel): Observable<OrderModel> {
+  placeOrder(customerOrder: OrderModel): Observable<any> {
     const customerId = this.userService.getUserIdFromSessionStorage();
-    return this.http.post<OrderModel>(this.baseUrl + 'add/' + customerId , customerOrder);
+    return this.http.post(this.baseUrl + 'add/' + customerId , customerOrder);
   }
 }

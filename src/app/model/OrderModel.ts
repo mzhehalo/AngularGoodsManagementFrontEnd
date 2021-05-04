@@ -4,7 +4,7 @@ import {UserModel} from './UserModel';
 export class OrderModel{
   id?: number;
   customerAddress: string;
-  customerNumber: number;
+  customerNumber: string;
   customerName: string;
   customerCountry: string;
   created?: string;
