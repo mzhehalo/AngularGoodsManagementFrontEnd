@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
 import {AuthService} from './auth.service';
 
 @Component({
@@ -10,7 +9,7 @@ import {AuthService} from './auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  errorMessage = 'Invalid Credentials';
+  errorMessage: string;
   successMessage: string;
   invalidLogin = false;
   loginSuccess = false;
@@ -28,14 +27,19 @@ export class LoginComponent implements OnInit {
   }
 
   authenticate(): void {
-    return this.authService.authenticate({
+    this.authService.authenticate({
       email: this.loginForm.value.email,
       password: this.loginForm.value.password
-    }).subscribe((result) => {
+    }).subscribe((authResponse) => {
+      this.authService.registerSuccessfulLogin(this.loginForm.value.email, authResponse);
+      this.authService.loggedInEmitter.emit(true);
+      this.authService.setUserToSessionStorage();
       this.invalidLogin = false;
       this.loginSuccess = true;
       this.successMessage = 'Login Successful';
     }, (error) => {
+      console.log(error);
+      this.errorMessage = error.error.message;
       this.invalidLogin = true;
       this.loginSuccess = false;
     });

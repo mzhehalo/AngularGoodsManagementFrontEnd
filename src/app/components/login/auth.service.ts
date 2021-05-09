@@ -1,10 +1,12 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {UserModel} from '../../model/UserModel';
 import {HttpClient} from '@angular/common/http';
-import {map} from 'rxjs/operators';
 import {Router} from '@angular/router';
 import {UserService} from '../edit-user/user.service';
 import {Constants} from '../../config/constants';
+import {Observable} from 'rxjs';
+import {AuthenticationResponse} from '../../model/authentication-response';
+import {AuthenticationRequest} from '../../model/authentication-request';
 
 @Injectable({
   providedIn: 'root'
@@ -20,22 +22,13 @@ export class AuthService {
   ) {
   }
 
-  authenticate(authenticationModel: UserModel): any {
-    return this.httpClient.get(this.baseUrl + 'login',
-      {headers: {authorization: this.createBasicAuthToken(authenticationModel.email, authenticationModel.password)}})
-      .pipe(map((res) => {
-        this.registerSuccessfulLogin(authenticationModel.email, authenticationModel.password);
-        this.loggedInEmitter.emit(true);
-        this.setUserToSessionStorage();
-      }));
+  authenticate(authenticationRequest: AuthenticationRequest): Observable<AuthenticationResponse> {
+    return this.httpClient.post<AuthenticationResponse>(this.baseUrl + 'login',
+      authenticationRequest);
   }
 
-  createBasicAuthToken(email: any, password: any): string {
-    return 'Basic ' + btoa(email + ':' + password);
-  }
-
-  registerSuccessfulLogin(email: string, password: string): void {
-    this.userService.setAuthenticateNameToSessionStorage(`Basic ${btoa(email + ':' + password)}`);
+  registerSuccessfulLogin(email: string, authResponse: AuthenticationResponse): void {
+    this.userService.setAuthenticateNameToSessionStorage(`Bearer ${authResponse.jwtToken}`);
     this.userService.setEmailToSessionStorage(email);
   }
 
@@ -63,7 +56,7 @@ export class AuthService {
     return user !== null;
   }
 
-  getBasicAuth(): string {
+  getJwtToken(): string {
     return this.userService.getAuthenticateNameFromSessionStorage();
   }
 }

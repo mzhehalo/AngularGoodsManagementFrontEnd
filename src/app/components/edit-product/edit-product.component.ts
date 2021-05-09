@@ -3,9 +3,9 @@ import {FormBuilder, Validators} from '@angular/forms';
 import {AuthService} from '../login/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProductModel} from '../../model/ProductModel';
-import {EditProductService} from './edit-product.service';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
 import {UserService} from '../edit-user/user.service';
+import {ProductService} from '../product-list/product.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -26,7 +26,7 @@ export class EditProductComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
               private activatedRoute: ActivatedRoute,
-              private editProductService: EditProductService,
+              private productService: ProductService,
               private router: Router,
               private dropDownMenuService: DropdownCategoriesService,
               private userService: UserService
@@ -65,7 +65,7 @@ export class EditProductComponent implements OnInit {
     formData.append('productBrand', this.editProductForm.value.productBrand);
     formData.append('productPrice', this.editProductForm.value.productPrice);
     formData.append('productId', this.product.id.toString());
-    this.editProductService.editProduct(formData).subscribe(value => {
+    this.productService.editProduct(formData).subscribe(value => {
         this.router.navigateByUrl(this.firstNameFromStorage);
       });
   }

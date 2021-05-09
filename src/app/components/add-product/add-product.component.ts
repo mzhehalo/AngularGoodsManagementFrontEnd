@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AddProductService} from './add-product.service';
 import {DropdownCategoriesService} from '../dropdown-categories/dropdown-categories.service';
 import {UserService} from '../edit-user/user.service';
+import {ProductService} from '../product-list/product.service';
 
 @Component({
   selector: 'app-add-product',
@@ -20,7 +20,7 @@ export class AddProductComponent implements OnInit {
   selectedFilesName = 'no name';
 
   constructor(private formBuilder: FormBuilder,
-              private addProductService: AddProductService,
+              private productService: ProductService,
               private dropDownMenuService: DropdownCategoriesService,
               private userService: UserService
   ) {
@@ -54,7 +54,7 @@ export class AddProductComponent implements OnInit {
     formData.append('productBrand', this.addProductForm.value.productBrand);
     formData.append('productPrice', this.addProductForm.value.productPrice);
     formData.append('sellerId', this.id.toString());
-    this.addProductService.addProduct(formData).subscribe(value => {
+    this.productService.addProduct(formData).subscribe(value => {
     });
   }
 

@@ -2,8 +2,8 @@
   <div class="list-group-item p-0">
     <p class="d-flex justify-content-center mt-3 font-weight-bold">Login</p>
     <form class="p-5 border-top" [formGroup]="loginForm">
-      <div class="alert alert-warning" *ngIf='invalidLogin'>{{errorMessage}}</div>
-      <div class="alert alert-success" *ngIf='loginSuccess'>{{successMessage}}</div>
+      <div class="alert alert-warning text-center" *ngIf='invalidLogin'>{{errorMessage}}</div>
+      <div class="alert alert-success text-center" *ngIf='loginSuccess'>{{successMessage}}</div>
       <div>
         <div>
           <div class="mt-3">Your email:</div>
