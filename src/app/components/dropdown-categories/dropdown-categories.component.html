@@ -1,8 +1,12 @@
-<ul class="dropdown-menu">
+<ul [class.show]="isShowCategories" class="dropdown--menu">
   <li class="dropdown-submenu dropdown-item btn" *ngFor="let category of data">
     <span tabindex="-1"
           (click)="passCategory(category.mainCategory, category.mainCategory)">{{category.mainCategory}}</span>
-    <ul class="dropdown-menu" *ngIf="category.subCategories.length">
+    <span (click)="subDropDownToggle(category.mainCategory)" *ngIf="category.subCategories.length"
+          class="dropdown-toggle"></span>
+    <ul [class.show]="toggleCategory === category.mainCategory && isShowCategories && category.subCategories.length"
+        class="dropdown--menu position-relative"
+        *ngIf="category.subCategories.length">
       <li class="dropdown-item btn" *ngFor="let subCategory of category.subCategories"
           (click)="passCategory(category.mainCategory , subCategory.subCategory)">{{subCategory.subCategory}}</li>
     </ul>

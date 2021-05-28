@@ -1,13 +1,14 @@
-<div ngbDropdown class="d-inline-block" display="dynamic">
-  <button class="btn btn-outline-light" id="dropdownBasic1" ngbDropdownToggle>Profile</button>
-  <div ngbDropdownMenu aria-labelledby="dropdownBasic1" class="dropdown-menu-right">
-    <button ngbDropdownItem class="border-bottom">{{user.firstName}}</button>
-    <button ngbDropdownItem [routerLink]="user.firstName" *ngIf="user.firstName">Main</button>
-    <button ngbDropdownItem *ngIf="user.role !== 'ROLE_ADMIN'" [routerLink]="[user.firstName + '/edit-user/' + user.id ]">Edit user</button>
-    <button ngbDropdownItem *ngIf="user.role !== 'ROLE_ADMIN'"
-            (click)="openConfirmationDialog()"
-            class="btn bg-danger">Delete user
-    </button>
-    <button ngbDropdownItem [routerLink]="[user.firstName +'/logout']">Logout</button>
-  </div>
-</div>
+  <ul [class.show]="isShowProfile" class="dropdown--menu">
+    <li class="dropdown-submenu d-block text-center pt-1 pb-1 font-weight-bold border-bottom">{{user.firstName}}</li>
+    <li class="dropdown-submenu dropdown-item cursor-pointer"
+        (click)="this.isShowProfileChange.emit(false);"
+        [routerLink]="user.firstName" *ngIf="user.firstName">Main</li>
+    <li class="dropdown-submenu dropdown-item cursor-pointer" (click)="this.isShowProfileChange.emit(false);"
+        *ngIf="user.role !== 'ROLE_ADMIN'"
+        [routerLink]="[user.firstName + '/edit-user/' + user.id ]">Edit user</li>
+    <li class="dropdown-submenu dropdown-item bg-danger cursor-pointer"
+        *ngIf="user.role !== 'ROLE_ADMIN'"
+            (click)="openConfirmationDialog()">Delete user
+    </li>
+    <li class="dropdown-submenu dropdown-item cursor-pointer" (click)="handleLogout()">Logout</li>
+  </ul>

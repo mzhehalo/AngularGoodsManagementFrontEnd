@@ -26,13 +26,13 @@ export class DropdownCategoriesService {
       this.mainCategoryEmitter.emit(mainCategory);
       this.subCategoryEmitter.emit(subCategory);
     } else if (componentName.includes('header')) {
-      this.router.navigate([this.userService.getUserIdFromSessionStorage() + '/category/' + mainCategory + '/' + subCategory]);
+      this.router.navigate([this.userService.getFirstNameFromSessionStorage() + '/category/' + mainCategory + '/' + subCategory]);
     }
   }
 
-  getProductsByCategory(mainCategory: string, subCategory: string, currentPage: number, size: number):
+  getProductsByCategory(mainCategory: string, subCategory: string, currentPage: number, size: number, priceMin: number, priceMax: number):
     Observable<ProductPageModel> {
     return this.http.get<ProductPageModel>(this.baseUrl + 'category/' + mainCategory + '/' + subCategory +
-      '/' + currentPage + '/' + size);
+      '/' + currentPage + '/' + size + '/' + priceMin + '/' + priceMax);
   }
 }

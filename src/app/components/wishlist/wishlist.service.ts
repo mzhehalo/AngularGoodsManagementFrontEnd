@@ -1,9 +1,7 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, Subscription} from 'rxjs';
-import {UserModel} from '../../model/UserModel';
+import {Observable} from 'rxjs';
 import {ProductModel} from '../../model/ProductModel';
-import {UserService} from '../edit-user/user.service';
 import {Constants} from '../../config/constants';
 
 @Injectable({
@@ -16,37 +14,22 @@ export class WishlistService {
   @Output() wishlistItemEmitter: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private httpClient: HttpClient,
-              private userService: UserService
               ) {
   }
 
   getAllProductsWishlist(): Observable<ProductModel[]> {
-    return this.httpClient.get<ProductModel[]>(this.baseUrl + 'get-products/' + this.userService.getUserIdFromSessionStorage());
+    return this.httpClient.get<ProductModel[]>(this.baseUrl + 'get-products');
   }
 
   getLikesWishList(): Observable<number[]> {
-    return this.httpClient.get<number[]>(this.baseUrl + 'get-likes/' + this.userService.getUserIdFromSessionStorage());
+    return this.httpClient.get<number[]>(this.baseUrl + 'get-likes');
   }
 
-  addLikeToWishlist(productId: number, userId: number): Subscription {
-    return this.httpClient.post<UserModel>(this.baseUrl + 'add', {productId, userId}).subscribe(
-      value => {
-        this.getLikesWishList().subscribe(data => {
-          this.wishlistQuantityEmitter.emit(data.length);
-        });
-      },
-      error => console.log(error)
-    );
+  addLikeToWishlist(productId: number): Observable<number[]> {
+    return this.httpClient.post<number[]>(this.baseUrl + 'add', productId);
   }
 
-  deleteLikeFromWishlist(productId: number, customerId: number): void {
-    this.httpClient.delete<UserModel>(this.baseUrl + 'delete/' + customerId + '/' + productId).subscribe(
-      value => {
-        this.getLikesWishList().subscribe(data => {
-          this.wishlistQuantityEmitter.emit(data.length);
-        });
-      },
-      error => console.log(error)
-    );
+  removeLikeFromWishlist(productId: number): Observable<number[]> {
+    return this.httpClient.delete<number[]>(this.baseUrl + 'delete/' + productId);
   }
 }

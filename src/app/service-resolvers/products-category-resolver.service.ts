@@ -9,12 +9,13 @@ import {ProductPageModel} from '../model/ProductPageModel';
 })
 export class ProductsCategoryResolverService implements Resolve<ProductPageModel> {
 
-  constructor(private dropdownCategoriesService: DropdownCategoriesService) {
+  constructor(private dropdownCategoriesService: DropdownCategoriesService
+              ) {
   }
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ProductPageModel> | Promise<ProductPageModel> |
     ProductPageModel
   {
-    return this.dropdownCategoriesService.getProductsByCategory(route.url[0].toString(), route.url[1].toString(), 1, 6);
+    return this.dropdownCategoriesService.getProductsByCategory(route.url[0].toString(), route.url[1].toString(), 1, 6, 0, 999999999);
   }
 }

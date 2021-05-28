@@ -1,69 +1,82 @@
-<nav class="navbar bg-dark">
-  <div class="d-flex justify-content-start">
-    <span *ngIf="isLoggedIn; then logined else preLogined"></span>
-    <ng-template #logined>
-      <a class="text-decoration-none text-white" (click)="routerMainPage()"><h3>GoodsManagement1.0</h3></a>
-    </ng-template>
-    <ng-template #preLogined>
-      <a class="text-decoration-none text-white" routerLink="/login"><h3>GoodsManagement1.0</h3></a>
-    </ng-template>
-    <div class="ml-1 bg-success align-self-end rounded pl-1 pr-1 " *ngIf="user.role === 'ROLE_CUSTOMER'">Customer</div>
-    <div class="ml-1 bg-deepskyblue align-self-end rounded pl-1 pr-1" *ngIf="user.role === 'ROLE_SELLER'">Seller</div>
-    <div class="ml-1 bg-warning align-self-end rounded pl-1 pr-1" *ngIf="user.role === 'ROLE_ADMIN'">Admin</div>
+<div class="p-2 d-flex justify-content-between flex-wrap">
+  <div class="d-flex flex-wrap align-items-center">
+    <div class="btn text-decoration-none text-white cursor-pointer">
+      <a (click)="routerMainPage()">
+        <img src="../../../assets/Images/LogoGoodsManagement1.0.png" alt="Logo of GoodsManagement1.0">
+      </a>
+    </div>
+    <div class="mt-2 bg-success align-self-baseline rounded pl-1 pr-1 " *ngIf="user.role === 'ROLE_CUSTOMER'">
+      Customer
+    </div>
+    <div class="mt-2 bg-deepskyblue rounded pl-1 pr-1 align-self-baseline" *ngIf="user.role === 'ROLE_SELLER'">
+      Seller
+    </div>
+    <div class="mt-2 bg-warning align-self-baseline rounded pl-1 pr-1" *ngIf="user.role === 'ROLE_ADMIN'">Admin
+    </div>
   </div>
-  <ul class="list-unstyled d-flex align-content-center p-0 m-0 d-flex justify-content-end">
-    <li class="ml-1 mr-1" *ngIf="isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light btn"
-         *ngIf="user.firstName" (click)="routerMainPage()">Main Page</a>
-    </li>
 
-    <li *ngIf="isLoggedIn">
-      <div class="dropdown">
-        <button class="btn btn-outline-light dropdown-toggle" type="button" data-toggle="dropdown">
-          Categories <span class="caret"></span>
-        </button>
-        <app-dropdown-menu [componentName]="'header'"></app-dropdown-menu>
-      </div>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_SELLER'">
-      <a class="nav-item nav-link text-decoration-none text-light btn" (click)="routerEditProduct()">Add Product</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_CUSTOMER'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/wishlist']">Wishlist({{wishlistQuantity || 0}})</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_SELLER'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/orders']">Orders({{ordersQuantity || 0}})</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_CUSTOMER'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/cart']">Cart({{cartQuantity || 0}})</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_ADMIN'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/edit/categories']">Edit Categories</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_ADMIN'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/edit/users']">Users</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="user.role === 'ROLE_ADMIN' || user.role === 'ROLE_SELLER'">
-      <a class="nav-item nav-link text-decoration-none text-light"
-         [routerLink]="[user.firstName + '/statistics']">Statistics</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="!isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="isLoggedIn">
-      <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[user.firstName + '/logout']"
-         (click)="handleLogout()">Logout</a>
-    </li>
-    <li class="ml-1 mr-1" *ngIf="isLoggedIn">
-      <app-profile-menu></app-profile-menu>
-    </li>
-  </ul>
-</nav>
+  <div class="d-lg-none align-self-center d-flex ml-auto" (click)="toggleBurger()">
+    <div [class.active-burger]="isActiveBurger" id="burger" class="burger position-relative"><span></span></div>
+  </div>
+
+  <nav [class.active-burger]="isActiveBurger"
+       class="col-lg-8 main_nav_menu d-flex flex-column justify-content-center">
+
+    <ul
+      class="list-unstyled align-self-center d-lg-flex d-flex flex-lg-row flex-lg-wrap flex-column justify-content-start position-relative">
+      <li *ngIf="isLoggedIn">
+        <a class="nav-item nav-link text-decoration-none text-light cursor-pointer"
+           *ngIf="user.firstName" (click)="routerMainPage()" >Main Page</a>
+      </li>
+
+      <li *ngIf="isLoggedIn" (clickOutside)="onClickedOutsideCategories($event)">
+        <a class="nav-item nav-link text-decoration-none text-light dropdown-toggle cursor-pointer"
+           (click)="toggleCategories()">Categories</a>
+        <app-dropdown-menu [(isShowCategories)]="isShowCategories" [componentName]="'header'"></app-dropdown-menu>
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a class="nav-item nav-link text-decoration-none text-light" routerLink="login">Login</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_SELLER'">
+        <a class="nav-item nav-link text-decoration-none text-light" [routerLink]="[user.firstName + '/add-product']">Add
+          Product</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_CUSTOMER'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/wishlist']">Wishlist({{wishlistQuantity || 0}})</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_SELLER'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/orders']">Orders({{ordersQuantity || 0}})</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_CUSTOMER'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/cart']">Cart({{cartQuantity || 0}})</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_ADMIN'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/edit/categories']">Edit Categories</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_ADMIN'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/edit/users']">Users</a>
+      </li>
+      <li *ngIf="user.role === 'ROLE_ADMIN' || user.role === 'ROLE_SELLER'">
+        <a class="nav-item nav-link text-decoration-none text-light"
+           [routerLink]="[user.firstName + '/statistics']">Statistics</a>
+      </li>
+      <li *ngIf="!isLoggedIn">
+        <a class="nav-item nav-link text-decoration-none text-light" routerLink="register">Registration</a>
+      </li>
+      <li *ngIf="isLoggedIn">
+        <a class="nav-item nav-link text-decoration-none text-light cursor-pointer"
+           (click)="handleLogout()">Logout</a>
+      </li>
+      <li *ngIf="isLoggedIn" (clickOutside)="onClickedOutsideProfile($event)">
+        <a class="nav-item nav-link text-decoration-none text-light dropdown-toggle cursor-pointer"
+           (click)="toggleProfile()">Profile</a>
+        <app-profile-menu [(isShowProfile)]='isShowProfile'></app-profile-menu>
+      </li>
+    </ul>
+  </nav>
+</div>

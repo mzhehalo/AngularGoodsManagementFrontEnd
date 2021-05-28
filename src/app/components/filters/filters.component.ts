@@ -10,27 +10,44 @@ import {FilterService} from './filter.service';
 })
 export class FiltersComponent implements OnInit {
   filterGroup: any;
-  priceMinPossible: number;
-  priceMaxPossible: number;
+  priceMinPossible = 0;
+  priceMaxPossible = 0;
 
   constructor(private formBuilder: FormBuilder,
               private messengerService: MessengerService,
               private filterService: FilterService
   ) {
-    this.filterGroup = formBuilder.group({
-      filterFrom: [this.filterService.getPriceMinPossible(), [Validators.required]],
-      filterTo: [this.filterService.getPriceMaxPossible(), [Validators.required]]
-    });
   }
 
   ngOnInit(): void {
-    this.priceMinPossible = this.filterService.getPriceMinPossible();
-    this.priceMaxPossible = this.filterService.getPriceMaxPossible();
+    this.filterService.minPossible.subscribe(value => {
+      this.priceMinPossible = value;
+      this.filterGroup.controls.filterFrom.setValue(value);
+    });
+
+    this.filterService.maxPossible.subscribe(value => {
+      this.priceMaxPossible = value;
+      this.filterGroup.controls.filterTo.setValue(value);
+    });
+    this.filterGroup = this.formBuilder.group({
+      filterFrom: [this.priceMinPossible, [Validators.required]],
+      filterTo: [this.priceMaxPossible, [Validators.required]]
+    });
+
   }
 
   filterPrice(): void {
     this.filterService.setPriceMin(this.filterGroup.value.filterFrom);
     this.filterService.setPriceMax(this.filterGroup.value.filterTo);
     this.messengerService.sendMessageFilter();
+    this.messengerService.sendMessageFilterCategory();
+  }
+
+  resetPrice(): void {
+    this.filterService.setPriceMin(this.priceMinPossible);
+    this.filterService.setPriceMax(this.priceMaxPossible);
+    this.messengerService.sendMessageFilter();
+    this.messengerService.sendMessageFilterCategory();
+    this.ngOnInit();
   }
 }

@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Constants} from '../../config/constants';
 
 @Injectable({
@@ -6,23 +6,12 @@ import {Constants} from '../../config/constants';
 })
 export class FilterService {
 
+  @Output()
+  minPossible: EventEmitter<number> = new EventEmitter();
+  @Output()
+  maxPossible: EventEmitter<number> = new EventEmitter();
+
   constructor() {
-  }
-
-  setPriceMinPossible(value): void {
-    sessionStorage.setItem(Constants.PRICE_MIN_POSSIBLE, value);
-  }
-
-  setPriceMaxPossible(value): void {
-    sessionStorage.setItem(Constants.PRICE_MAX_POSSIBLE, value);
-  }
-
-  getPriceMinPossible(): number {
-    return Number(sessionStorage.getItem(Constants.PRICE_MIN_POSSIBLE));
-  }
-
-  getPriceMaxPossible(): number {
-    return Number(sessionStorage.getItem(Constants.PRICE_MAX_POSSIBLE));
   }
 
   setPriceMin(value): void {

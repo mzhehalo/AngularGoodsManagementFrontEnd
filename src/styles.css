@@ -45,3 +45,45 @@ ScrollBar Settings
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/*
+Z-index settings
+*/
+.z-top{
+  z-index: 9999;
+}
+
+.z-bottom {
+  z-index: 1;
+}
+
+/*
+Cursor-pointer
+*/
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/*
+Confirmation dialog settings
+*/
+
+.modal {
+  top: 90px;
+}
+
+/*
+Overflow settings
+*/
+
+.overflow-x-a {
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 992px){
+  .modal {
+    top: 500px;
+  }
+}
+

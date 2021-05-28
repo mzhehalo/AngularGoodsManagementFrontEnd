@@ -7,6 +7,7 @@ import {Observable, Subject} from 'rxjs';
 export class MessengerService {
   subject = new Subject();
   subjectFilter = new Subject();
+  subjectFilterCategory = new Subject();
   subjectCart = new Subject();
   subjectOrder = new Subject();
   subjectDeleteProduct = new Subject();
@@ -44,6 +45,14 @@ export class MessengerService {
 
   getMessageFilter(): Observable<{}> {
     return this.subjectFilter.asObservable();
+  }
+
+  sendMessageFilterCategory(): void {
+    this.subjectFilterCategory.next();
+  }
+
+  getMessageFilterCategory(): Observable<{}> {
+    return this.subjectFilterCategory.asObservable();
   }
 
   sendMessageAddCategory(): void {

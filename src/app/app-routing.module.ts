@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {LoginComponent} from './components/login/login.component';
 import {RegisterComponent} from './components/register/register.component';
 import {MainComponent} from './components/main/main.component';
@@ -27,11 +27,18 @@ import {StatisticsComponent} from './components/statistics/statistics.component'
 import {EditUsersComponent} from './components/edit-users/edit-users.component';
 import {UsersResolverService} from './service-resolvers/users-resolver.service';
 import {StatisticsResolverService} from './service-resolvers/statistics-resolver.service';
+import {UserRoles} from './model/user-roles.enum';
 
 
 const routes: Routes = [
-    {path: 'login', component: LoginComponent, canActivate: [AuthGuard]},
-    {path: 'register', component: RegisterComponent, canActivate: [AuthGuard]},
+    {
+      path: '', component: MainComponent,
+      resolve: {Products: ProductsResolverService},
+      data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+      canActivate: [AuthGuard]
+    },
+    {path: 'login', component: LoginComponent},
+    {path: 'register', component: RegisterComponent},
     {
       path: ':firstName', children: [
         {path: '', component: MainComponent, resolve: {Products: ProductsResolverService}},
@@ -41,78 +48,141 @@ const routes: Routes = [
               path: ':mainCategory/:subCategory', component: MainComponent,
               resolve: {CategoryProducts: ProductsCategoryResolverService}
             },
-          ]
+          ],
+          data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
             WishlistArr: WishlistResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'category/:mainCategory/:subCategory/full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
             WishlistArr: WishlistResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'category/:mainCategory/:subCategory/edit-product/:id', component: EditProductComponent, resolve: {
             Product: ProductResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'category/:mainCategory/:subCategory/full-product/:id/edit-product', component: EditProductComponent, resolve: {
             Product: ProductResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'cart/full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
             WishlistArr: WishlistResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.CUSTOMER]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'wishlist/full-product/:id', component: ProductItemFullComponent, resolve: {
             Product: ProductResolverService,
-            WishlistArr: WishlistResolverService
-          }
+            WishlistArr: WishlistResolverService,
+          },
+          data: {userRoles: [UserRoles.CUSTOMER]},
+          canActivate: [AuthGuard]
         },
-        {path: 'profile', component: ProfileMenuComponent},
-        {path: 'edit-user/:userId', component: EditUserComponent, resolve: {User: UserResolverService}},
-        {path: 'edit-product/:id', component: EditProductComponent, resolve: {Product: ProductResolverService}},
+        {path: 'profile', component: ProfileMenuComponent,
+          data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
+        },
+        {path: 'edit-user/:userId', component: EditUserComponent, resolve: {User: UserResolverService},
+          data: {userRoles: [UserRoles.CUSTOMER, UserRoles.SELLER, UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
+        },
+        {
+          path: 'edit-product/:id',
+          component: EditProductComponent,
+          resolve: {Product: ProductResolverService},
+          data: {
+            userRoles: [UserRoles.SELLER, UserRoles.ADMIN]
+          },
+          canActivate: [AuthGuard]
+        },
         {
           path: 'full-product/:id/edit-product', component: EditProductComponent,
           resolve: {Product: ProductResolverService},
+          data: {
+            userRoles: [UserRoles.SELLER, UserRoles.ADMIN]
+          },
+          canActivate: [AuthGuard]
         },
-        {path: 'logout', component: LogoutComponent},
-        {path: 'add-product', component: AddProductComponent},
-        {path: 'wishlist', component: WishlistComponent, resolve: {WishlistProducts: WishlistProductsResolverService}},
-        {path: 'cart', component: CartFullComponent},
+        {
+          path: 'add-product',
+          component: AddProductComponent,
+          data: {
+            userRoles: [UserRoles.SELLER, UserRoles.ADMIN]
+          },
+          canActivate: [AuthGuard]
+        },
+        {
+          path: 'wishlist', component: WishlistComponent,
+          resolve: {WishlistProducts: WishlistProductsResolverService},
+          data: {userRoles: [UserRoles.CUSTOMER]},
+          canActivate: [AuthGuard]
+        },
+        {
+          path: 'cart', component: CartFullComponent,
+          data: {userRoles: [UserRoles.CUSTOMER]},
+          canActivate: [AuthGuard]
+        },
         {
           path: 'orders', component: OrderComponent, resolve: {
             Orders: OrdersResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.SELLER]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'orders/full-order/:orderId', component: OrderItemFullComponent, resolve: {
             Order: OrderResolverService
-          }
+          },
+          data: {
+            userRoles: [UserRoles.SELLER, UserRoles.CUSTOMER]
+          },
+          canActivate: [AuthGuard]
         },
         {
-          path: 'edit/categories', component: EditCategoriesComponent
+          path: 'edit/categories', component: EditCategoriesComponent,
+          data: {userRoles: [UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
           path: 'statistics', component: StatisticsComponent, resolve: {
             Statistics: StatisticsResolverService
-          }
+          },
+          data: {
+            userRoles: [UserRoles.SELLER, UserRoles.ADMIN]
+          },
+          canActivate: [AuthGuard]
         },
         {
           path: 'edit/users', component: EditUsersComponent, resolve: {
             Users: UsersResolverService
-          }
+          },
+          data: {userRoles: [UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         },
         {
-          path: 'edit/users/register', component: RegisterComponent
+          path: 'edit/users/register', component: RegisterComponent,
+          data: {userRoles: [UserRoles.ADMIN]},
+          canActivate: [AuthGuard]
         }
       ],
     }

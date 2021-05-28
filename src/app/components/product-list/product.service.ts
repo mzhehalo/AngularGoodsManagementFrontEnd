@@ -4,6 +4,7 @@ import {ProductModel} from '../../model/ProductModel';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ProductPageModel} from '../../model/ProductPageModel';
 import {Constants} from '../../config/constants';
+import {MinMaxModel} from '../../model/min-max-model';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +21,13 @@ export class ProductService {
       '/' + priceMin + '/' + priceMax);
   }
 
-  getProductMinMax(): Observable<number[]> {
-    return this.httpClient.get<number[]>(this.baseUrl + 'get/min/max');
+  getProductMinMax(mainCategory: string,
+                   subCategory: string): Observable<MinMaxModel> {
+    return this.httpClient.get<MinMaxModel>(this.baseUrl + 'get/min/max/' + mainCategory + '/' + subCategory);
   }
 
-  getProductById(id: number): Observable<ProductModel> {
-    return this.httpClient.get<ProductModel>(this.baseUrl + 'get/' + id);
+  getProductById(productId: number): Observable<ProductModel> {
+    return this.httpClient.get<ProductModel>(this.baseUrl + 'get/' + productId);
   }
 
   editProduct(formData: FormData): Observable<ProductModel> {
@@ -41,7 +43,7 @@ export class ProductService {
     return this.httpClient.post<any>(url, formData, {headers});
   }
 
-  deleteProduct(id: number): Observable<{}> {
-    return this.httpClient.delete(this.baseUrl + 'delete/' + id);
+  deleteProduct(productId: number): Observable<{}> {
+    return this.httpClient.delete(this.baseUrl + 'delete/' + productId);
   }
 }

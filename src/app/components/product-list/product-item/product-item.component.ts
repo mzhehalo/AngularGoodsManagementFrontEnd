@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ProductModel} from '../../../model/ProductModel';
 import {ProductService} from '../product.service';
 import {Router} from '@angular/router';
@@ -7,13 +7,15 @@ import {CartService} from '../../cart/cart.service';
 import {DomSanitizer} from '@angular/platform-browser';
 import {MessengerService} from '../../../messengers/messenger.service';
 import {UserService} from '../../edit-user/user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-product-item',
   templateUrl: './product-item.component.html',
   styleUrls: ['./product-item.component.css']
 })
-export class ProductItemComponent implements OnInit {
+export class ProductItemComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   @Input()
   product: ProductModel;
   role: string;
@@ -28,13 +30,15 @@ export class ProductItemComponent implements OnInit {
               private cartService: CartService,
               private dom: DomSanitizer,
               private messengerService: MessengerService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.userId = this.userService.getUserIdFromSessionStorage();
-    this.userService.getUserDetails(this.userId).subscribe(data => {
-      this.role = data.role;
-    });
+    this.subscription.add(
+      this.userService.getAuthUserDetails().subscribe(data => {
+        this.role = data.role;
+      }));
   }
 
   photoURL(imageUrl): string {
@@ -43,7 +47,11 @@ export class ProductItemComponent implements OnInit {
   }
 
   addToCart(): void {
-    this.cartService.addToCart(this.userId, this.product.id);
+    this.subscription.add(
+      this.cartService.addToCart(this.product.id).subscribe(value => {
+        this.messengerService.sendMessageCart();
+        this.cartService.cartQuantityEmitter.emit(value.length);
+      }));
   }
 
   deleteProduct(): void {
@@ -53,16 +61,30 @@ export class ProductItemComponent implements OnInit {
   }
 
   addToWishlist(): void {
-    this.wishlistService.addLikeToWishlist(this.product.id, this.userId);
-    this.wishListBoolean = !this.wishListBoolean;
+    this.subscription.add(
+      this.wishlistService.addLikeToWishlist(this.product.id).subscribe(
+        data => {
+          this.wishlistService.wishlistQuantityEmitter.emit(data.length);
+          this.wishListBoolean = !this.wishListBoolean;
+        })
+    );
   }
 
-  deleteFromWishlist(): void {
-    this.wishlistService.deleteLikeFromWishlist(this.product.id, this.userId);
-    this.wishListBoolean = !this.wishListBoolean;
+  removeFromWishlist(): void {
+    this.subscription.add(
+      this.wishlistService.removeLikeFromWishlist(this.product.id).subscribe(
+        data => {
+          this.wishlistService.wishlistQuantityEmitter.emit(data.length);
+          this.wishListBoolean = !this.wishListBoolean;
+        })
+    );
   }
 
   isOrderFullRoute(): boolean {
     return this.router.url.includes('orders/full-order/');
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

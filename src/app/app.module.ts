@@ -48,6 +48,8 @@ import {MatInputModule} from '@angular/material/input';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import {ConfirmationDialogService} from './components/confirmation-dialog/confirmation-dialog.service';
+import { ExpandMenuDirective } from './directive/expand-menu.directive';
+import {ClickOutsideModule} from 'ng-click-outside';
 
 @NgModule({
   declarations: [
@@ -82,7 +84,8 @@ import {ConfirmationDialogService} from './components/confirmation-dialog/confir
     StatisticsComponent,
     EditUsersComponent,
     DialogBoxComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    ExpandMenuDirective
   ],
   imports: [
     BrowserModule,
@@ -99,7 +102,8 @@ import {ConfirmationDialogService} from './components/confirmation-dialog/confir
     MatButtonModule,
     MatInputModule,
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ClickOutsideModule
   ],
   entryComponents: [DialogBoxComponent, ConfirmationDialogComponent],
   providers: [AuthGuard, LoginComponent, ProductListComponent, {

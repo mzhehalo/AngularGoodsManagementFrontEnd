@@ -1,7 +1,7 @@
-<div class="d-flex justify-content-center align-content-center mt-3 mb-5" xmlns="http://www.w3.org/1999/html">
+<div class="p-0 col col-lg-6 mt-3 mb-5 m-auto" xmlns="http://www.w3.org/1999/html">
   <div class="list-group-item p-0">
     <p class="d-flex justify-content-center mt-3 font-weight-bold">Add Product</p>
-    <form class="p-5 border-top" [formGroup]="addProductForm">
+    <form class="p-3 border-top" [formGroup]="addProductForm">
       <div>
         <div>
           <div class="mt-3">Product name:</div>
@@ -70,14 +70,12 @@
                  (change)="onSelectFile($event)">
         </div>
 
-        <div class="dropdown">
-          <div class="mt-3">Chosen category: <span class="font-weight-bold">{{subCategory}}</span></div>
-          <div class="mt-3">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-              Categories <span class="caret"></span>
-            </button>
-            <app-dropdown-menu formControlName="productCategory" [componentName]="'add-product'"></app-dropdown-menu>
-          </div>
+        <div *ngIf="isLoggedIn" (clickOutside)="onClickedOutsideAddProduct($event)">
+          <div class="mt-3 mb-1">Chosen category: <span class="font-weight-bold">{{subCategory}}</span></div>
+          <a class="btn btn-primary nav-item nav-link text-decoration-none text-light dropdown-toggle cursor-pointer"
+             (click)="toggleAddProduct()">Categories</a>
+          <app-dropdown-menu class="add-product" formControlName="productCategory" [isShowCategories]="isAddedProduct"
+                             [componentName]="'add-product'"></app-dropdown-menu>
         </div>
       </div>
       <div class="mt-3 d-flex justify-content-end">

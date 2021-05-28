@@ -1,15 +1,11 @@
-<div>
-  <div>
-    <app-header></app-header>
+<div class="col bg-dark z-top">
+  <app-header></app-header>
+</div>
+<div class="m-2 z-bottom">
+  <div class="col">
+    <router-outlet></router-outlet>
   </div>
-  <div class="m-2">
-    <div class="col">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-  <div>
-    <div class="col">
-      <app-footer></app-footer>
-    </div>
-  </div>
+</div>
+<div class="col">
+  <app-footer></app-footer>
 </div>

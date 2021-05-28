@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductModel} from '../../model/ProductModel';
 import {ProductService} from './product.service';
 import {WishlistService} from '../wishlist/wishlist.service';
 import {ActivatedRoute} from '@angular/router';
 import {MessengerService} from '../../messengers/messenger.service';
-import {UserService} from '../edit-user/user.service';
 import {FilterService} from '../filters/filter.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent implements OnInit {
+export class ProductListComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   productsFromDataBase: ProductModel[];
   wishlist: number[] = [];
   config: any;
@@ -35,7 +36,7 @@ export class ProductListComponent implements OnInit {
     this.priceMax = 999999999;
     this.productsFromDataBase = this.activatedRoute.snapshot.data.Products.productList;
     this.totalItems = this.activatedRoute.snapshot.data.Products.totalElements;
-    this.loadWishlist();
+    this.loadLikes();
     this.config = {
       itemsPerPage: 6,
       currentPage: 0,
@@ -53,18 +54,21 @@ export class ProductListComponent implements OnInit {
   }
 
   loadProducts(currentPage: number, size: number): void {
-    this.productService.getProductDetails(currentPage, size, this.priceMin, this.priceMax).subscribe(value => {
-      this.productsFromDataBase = value.productList;
-      this.config.totalItems = value.totalElements;
-      this.config.currentPage = value.number + 1;
-    });
+    this.subscription.add(
+      this.productService.getProductDetails(currentPage, size, this.priceMin, this.priceMax).subscribe(value => {
+        this.productsFromDataBase = value.productList;
+        this.config.totalItems = value.totalElements;
+        this.config.currentPage = value.number + 1;
+      })
+    );
   }
 
-  loadWishlist(): void {
-    this.wishlistService.getLikesWishList().subscribe(wishListArr => {
-      this.wishlist = wishListArr;
-      this.wishlistService.wishlistQuantityEmitter.emit(wishListArr.length);
-    });
+  loadLikes(): void {
+    this.subscription.add(
+      this.wishlistService.getLikesWishList().subscribe(wishListArr => {
+        this.wishlist = wishListArr;
+      })
+    );
   }
 
   pageChanged(event): void {
@@ -76,5 +80,9 @@ export class ProductListComponent implements OnInit {
     this.config.currentPage = 1;
     this.config.itemsPerPage = event.target.value;
     this.loadProducts(this.config.currentPage, event.target.value);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

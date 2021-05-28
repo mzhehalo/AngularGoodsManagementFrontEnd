@@ -1,16 +1,18 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../login/auth.service';
 import {UserModel} from '../../model/UserModel';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from './user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-edit-user',
   templateUrl: './edit-user.component.html',
   styleUrls: ['./edit-user.component.css']
 })
-export class EditUserComponent implements OnInit {
+export class EditUserComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   user: UserModel;
   editUserForm: any;
   passwordMatch = false;
@@ -24,7 +26,10 @@ export class EditUserComponent implements OnInit {
               private router: Router,
               private userService: UserService
   ) {
-    this.user = activatedRoute.snapshot.data.User;
+  }
+
+  ngOnInit(): void {
+    this.user = this.activatedRoute.snapshot.data.User;
     this.editUserForm = this.formBuilder.group({
       firstName: [this.user.firstName, [Validators.required]],
       lastName: [this.user.lastName, [Validators.required]],
@@ -32,6 +37,7 @@ export class EditUserComponent implements OnInit {
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]]
     }, {validators: this.password.bind(this)});
+    this.role = this.userService.getRoleFromSessionStorage();
   }
 
   password(formGroup: FormGroup): any {
@@ -40,37 +46,33 @@ export class EditUserComponent implements OnInit {
     return password === confirmPassword ? this.passwordMatch = true : this.passwordMatch = false;
   }
 
-
-  ngOnInit(): void {
-    this.role = this.userService.getRoleFromSessionStorage();
-  }
-
   editUser(): void {
-    this.editService.editUser({
-      firstName: this.editUserForm.value.firstName,
-      lastName: this.editUserForm.value.lastName,
-      email: this.editUserForm.value.email,
-      password: this.editUserForm.value.password
-    }, this.activatedRoute.snapshot.params.userId).subscribe(value => {
-      }, error => {
-        if (this.role !== 'ROLE_ADMIN') {
-          this.authService.logout();
-          this.router.navigateByUrl('login');
-        } else {
-          if (error.error !== 'Email already exist') {
+    this.subscription.add(
+      this.editService.editUser({
+        id: this.user.id,
+        firstName: this.editUserForm.value.firstName,
+        lastName: this.editUserForm.value.lastName,
+        email: this.editUserForm.value.email,
+        password: this.editUserForm.value.password
+      }).subscribe(value => {
+        }, error => {
+          if (this.role !== 'ROLE_ADMIN' && error.status === 200) {
+            this.authService.logout();
+            this.router.navigateByUrl('login');
+          } else {
             this.router.navigateByUrl(this.userService.getFirstNameFromSessionStorage() + '/edit/users');
           }
+          if (error.error === 'User with this email already exist') {
+            this.isEmailExist = error.error;
+          } else {
+            this.isEmailExist = '';
+          }
         }
-
-        if (error.error === 'Email already exist') {
-          this.isEmailExist = error.error;
-        } else {
-          this.isEmailExist = '';
-        }
-        console.log(error);
-      }
-    )
-    ;
+      )
+    );
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

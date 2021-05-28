@@ -1,18 +1,7 @@
 .dropdown-submenu {
   position: relative;
 }
-.dropdown-submenu > .dropdown-menu {
-  top: 0;
-  left: 100%;
-  margin-top: -6px;
-  margin-left: -1px;
-  -webkit-border-radius: 0 6px 6px 6px;
-  -moz-border-radius: 0 6px 6px 6px;
-  border-radius: 0 6px 6px 6px;
-}
-.dropdown-submenu:hover > .dropdown-menu {
-  display: block;
-}
+
 .dropdown-submenu > a:after {
   display: block;
   content: " ";
@@ -26,16 +15,87 @@
   margin-top: 5px;
   margin-right: -10px;
 }
+
 .dropdown-submenu:hover > a:after {
   border-left-color: #ffffff;
 }
-.dropdown-submenu.pull-left {
-  float: none;
+
+.dropdown-toggle::after {
+  width: 100%;
+  margin-left: 1.255em;
+  padding-right: 1.255em;
+  margin-top: 0.55em;
+  border-top: .3em solid transparent;
+  border-bottom: .3em solid transparent;
+  border-right: 0;
+  border-left: .3em solid;
 }
-.dropdown-submenu.pull-left > .dropdown-menu {
-  left: -100%;
-  margin-left: 10px;
-  -webkit-border-radius: 6px 0 6px 6px;
-  -moz-border-radius: 6px 0 6px 6px;
-  border-radius: 6px 0 6px 6px;
+
+.dropdown--menu {
+  display: none;
+}
+
+.dropdown-item:focus,
+.dropdown-item:hover {
+  color: deepskyblue;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+.show {
+  padding: 10px;
+  display: block;
+  position: absolute;
+  background-color: white;
+  border-radius: .25rem;
+  -webkit-box-shadow: 2px 5px 17px 0 rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 2px 5px 17px 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 2px 5px 17px 0 rgba(0, 0, 0, 0.75);
+}
+
+ul {
+  padding-left: 0;
+}
+
+.dropdown-item {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: black;
+}
+
+ul > li,
+ul > li > ul > li {
+  display: flex;
+  justify-content: flex-start;
+}
+
+:host(.add-product) > ul {
+  position: relative;
+  margin-top: 10px;
+  /*background-color: red;*/
+}
+
+@media screen and (max-width: 992px) {
+
+  .show {
+    display: block;
+    position: relative;
+    background-color: #5b6871;
+    border-radius: .25rem
+  }
+
+  .dropdown-item {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: white;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  ul > li {
+    color: white;
+  }
+
 }

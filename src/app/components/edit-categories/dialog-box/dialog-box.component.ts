@@ -8,7 +8,6 @@ import {MainCategoryModel} from '../../../model/main-category-model';
   styleUrls: ['./dialog-box.component.css']
 })
 export class DialogBoxComponent implements OnInit {
-
   action: string;
   categories: any;
 

@@ -1,5 +1,6 @@
 <div class="card mb-4 shadow-sm">
-  <img class="bd-placeholder-img w-25"
+  <img class="bd-placeholder-img w-100"
+       alt="Product Image"
        [src]="photoURL(product.productImg)">
   <div class="card-body">
     <p class="card-text">{{product.productName}}</p>
@@ -15,11 +16,13 @@
         role === 'ROLE_SELLER' && product.productSeller.id === userId"
                 (click)="deleteProduct()">Delete
         </button>
-        <button type="button" class="btn btn-sm btn-outline-primary ui-state-hover" *ngIf="role === 'ROLE_CUSTOMER'">
+        <button type="button" class="btn btn-sm btn-outline-primary ui-state-hover"
+                *ngIf="role === 'ROLE_CUSTOMER'"
+                (click)="addToCart()">
           Buy
         </button>
-        <div class="btn-outline-primary btn btn-sm like" *ngIf="role === 'ROLE_CUSTOMER'">
-          <i *ngIf="wishListBoolean" class="fas fa-heart" (click)="deleteFromWishlist()"></i>
+        <div class="btn-outline-primary btn btn-sm like border-left-0" *ngIf="role === 'ROLE_CUSTOMER'">
+          <i *ngIf="wishListBoolean" class="fas fa-heart" (click)="removeFromWishlist()"></i>
           <i *ngIf="!wishListBoolean" class="far fa-heart" (click)="addToWishlist()"></i>
         </div>
       </div>

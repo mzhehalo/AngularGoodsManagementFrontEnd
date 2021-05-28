@@ -14,7 +14,7 @@ export class StatisticsService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getAllStatistics(userId: number): Observable<StatisticsModel> {
-    return this.httpClient.get<StatisticsModel>(this.baseUrl + 'get/' + userId);
+  getAllStatistics(): Observable<StatisticsModel> {
+    return this.httpClient.get<StatisticsModel>(this.baseUrl + 'get');
   }
 }

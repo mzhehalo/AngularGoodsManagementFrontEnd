@@ -1,16 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {OrderModel} from '../../../../model/OrderModel';
 import {OrderService} from '../../order.service';
 import {MessengerService} from '../../../../messengers/messenger.service';
 import {UserService} from '../../../edit-user/user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-order-item',
   templateUrl: './order-item.component.html',
   styleUrls: ['./order-item.component.css']
 })
-export class OrderItemComponent implements OnInit {
-
+export class OrderItemComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   @Input()
   order: OrderModel;
 
@@ -24,10 +25,17 @@ export class OrderItemComponent implements OnInit {
   }
 
   deleteOrder(orderId: number): void {
-    this.orderService.deleteOrder(this.userService.getUserIdFromSessionStorage(), orderId).subscribe(data => {
-      this.messenger.sendMessageOrder();
-    }, error => {
-      console.log(error);
-    });
+    this.subscription.add(
+      this.orderService.deleteOrder(orderId).subscribe(data => {
+        this.orderService.orderQuantityEmitter.emit(data);
+        this.messenger.sendMessageOrder();
+      }, error => {
+        console.log(error);
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

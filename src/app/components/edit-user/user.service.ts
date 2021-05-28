@@ -13,28 +13,32 @@ export class UserService {
   constructor(private httpClient: HttpClient) {
   }
 
-  getUserDetailsByEmail(userEmail): Observable<UserModel> {
-    return this.httpClient.post<UserModel>(this.baseUrl + 'get/email', userEmail);
+  getAuthUserDetails(): Observable<UserModel> {
+    return this.httpClient.get<UserModel>(this.baseUrl + 'get');
   }
 
-  getUserDetails(userId): Observable<UserModel> {
-    return this.httpClient.get<UserModel>(this.baseUrl + 'get/' + userId);
+  getUserById(userId: number): Observable<UserModel> {
+    return this.httpClient.get<UserModel>(this.baseUrl + 'admin/get/' + userId);
   }
 
   getUsersDetails(): Observable<UserModel[]> {
     return this.httpClient.get<UserModel[]>(this.baseUrl + 'get/all');
   }
 
-  editUser(user: UserModel, userId: number): Observable<UserModel> {
-    return this.httpClient.put<UserModel>(this.baseUrl + 'edit/' + userId, user);
-  }
-
   registerUser(user: UserModel): Observable<UserModel> {
     return this.httpClient.post<UserModel>(this.baseUrl + 'register', user);
   }
 
-  deleteUser(userId: number): Observable<any> {
-    return this.httpClient.delete<Observable<any>>(this.baseUrl + 'delete/' + userId);
+  editUser(user: UserModel): Observable<UserModel> {
+    return this.httpClient.put<UserModel>(this.baseUrl + 'edit/', user);
+  }
+
+  deleteUser(): Observable<any> {
+    return this.httpClient.delete<Observable<any>>(this.baseUrl + 'delete/');
+  }
+
+  deleteUserById(userId: number): Observable<any> {
+    return this.httpClient.delete<Observable<any>>(this.baseUrl + 'admin/delete/' + userId);
   }
 
   getUserIdFromSessionStorage(): number {
@@ -51,14 +55,6 @@ export class UserService {
 
   setFirstNameToSessionStorage(value): void {
     sessionStorage.setItem(Constants.USER_SESSION_FIRST_NAME, value);
-  }
-
-  getEmailFromSessionStorage(): string {
-    return sessionStorage.getItem(Constants.USER_SESSION_EMAIL);
-  }
-
-  setEmailToSessionStorage(value): void {
-    sessionStorage.setItem(Constants.USER_SESSION_EMAIL, value);
   }
 
   getAuthenticateNameFromSessionStorage(): string {

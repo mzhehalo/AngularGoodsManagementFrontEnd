@@ -14,9 +14,9 @@ export class UserResolverService implements Resolve<UserModel> {
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<UserModel> | Promise<UserModel> | UserModel {
     if (this.userService.getRoleFromSessionStorage() === 'ROLE_ADMIN') {
-      return this.userService.getUserDetails(route.params.userId);
+      return this.userService.getUserById(route.params.userId);
     } else {
-      return this.userService.getUserDetails(this.userService.getUserIdFromSessionStorage());
+      return this.userService.getAuthUserDetails();
     }
   }
 }

@@ -1,22 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MessengerService} from '../../messengers/messenger.service';
 import {CartService} from './cart.service';
-import {UserService} from '../edit-user/user.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css']
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   cartItems = [];
   cartTotal = 0;
 
   constructor(private messengerService: MessengerService,
               private cartService: CartService,
-              private userService: UserService
   ) {
   }
+
 
   ngOnInit(): void {
     this.getAllCartProducts();
@@ -26,13 +27,19 @@ export class CartComponent implements OnInit {
   }
 
   getAllCartProducts(): void {
-    this.cartService.getCartProducts(this.userService.getUserIdFromSessionStorage()).subscribe(value => {
-      this.cartItems = value;
-      this.cartService.cartQuantityEmitter.emit(this.cartItems.length);
-      this.cartTotal = 0;
-      this.cartItems.forEach((item => {
-        this.cartTotal += (item.quantity * item.product.productPrice);
-      }));
-    });
+    this.subscription.add(
+      this.cartService.getCartProducts().subscribe(value => {
+        this.cartService.cartQuantityEmitter.emit(value.length);
+        this.cartItems = value;
+        this.cartTotal = 0;
+        this.cartItems.forEach((item => {
+          this.cartTotal += (item.quantity * item.product.productPrice);
+        }));
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -9,22 +9,30 @@ import {Constants} from '../../config/constants';
 })
 export class OrderService {
   private baseUrl = Constants.API_BASE_URL + 'order-info/';
+
   @Output()
   orderQuantityEmitter: EventEmitter<number> = new EventEmitter<number>();
-
 
   constructor(private http: HttpClient) {
   }
 
-  getOrdersBySeller(sellerId: number): Observable<OrderModel[]> {
-    return this.http.get<OrderModel[]>(this.baseUrl + 'get/orders/' + sellerId);
+  placeOrder(customerOrder: OrderModel): Observable<any> {
+    return this.http.post(this.baseUrl + 'add', customerOrder);
   }
 
-  getOrderBySellerAndOrderId(sellerId: number, orderId: number): Observable<OrderModel> {
-    return this.http.get<OrderModel>(this.baseUrl + 'get/order/' + sellerId + '/' + orderId );
+  getAllOrders(): Observable<OrderModel[]> {
+    return this.http.get<OrderModel[]>(this.baseUrl + 'get/orders');
   }
 
-  deleteOrder(sellerId: number, orderId: number): Observable<{}> {
-    return this.http.delete(this.baseUrl + 'delete/' + sellerId + '/' + orderId);
+  getOrdersQuantity(): Observable<number> {
+    return this.http.get<number>(this.baseUrl + 'get/orders/quantity');
+  }
+
+  getOrder(orderId: number): Observable<OrderModel> {
+    return this.http.get<OrderModel>(this.baseUrl + 'get/order/' + orderId);
+  }
+
+  deleteOrder(orderId: number): Observable<number> {
+    return this.http.delete<number>(this.baseUrl + 'delete/' + orderId);
   }
 }

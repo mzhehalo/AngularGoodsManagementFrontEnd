@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatTable} from '@angular/material/table';
 import {DialogBoxComponent} from './dialog-box/dialog-box.component';
 import {EditCategoriesService} from './edit-categories.service';
 import {MainCategoryModel} from '../../model/main-category-model';
 import {MessengerService} from '../../messengers/messenger.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-edit-categories',
@@ -12,8 +13,8 @@ import {MessengerService} from '../../messengers/messenger.service';
   styleUrls: ['./edit-categories.component.css']
 })
 
-export class EditCategoriesComponent implements OnInit {
-
+export class EditCategoriesComponent implements OnInit, OnDestroy {
+  private subscription: Subscription = new Subscription();
   displayedColumns: string[] = ['mainCategory', 'subCategory', 'actionMainCategory'];
   innerDisplayedColumns: string[] = ['subCategory', 'actionSubCategory'];
   dataSource: MainCategoryModel[];
@@ -25,7 +26,6 @@ export class EditCategoriesComponent implements OnInit {
               private messengerService: MessengerService
   ) {
   }
-
 
   ngOnInit(): void {
     this.loadCategories();
@@ -53,25 +53,31 @@ export class EditCategoriesComponent implements OnInit {
   }
 
   loadCategories(): void {
-    this.editCategoriesService.getCategories().subscribe(data => {
-      this.dataSource = data;
-    });
+    this.subscription.add(
+      this.editCategoriesService.getCategories().subscribe(data => {
+        this.dataSource = data;
+      })
+    );
   }
 
   addMainCategory(rowObj): void {
-    this.editCategoriesService.addMainCategory(rowObj.mainCategory).subscribe(data => {
-    }, error => {
-      this.loadCategories();
-      console.log(error);
-      this.messengerService.sendMessageAddCategory();
-    });
+    this.subscription.add(
+      this.editCategoriesService.addMainCategory(rowObj.mainCategory).subscribe(data => {
+      }, error => {
+        this.loadCategories();
+        console.log(error);
+        this.messengerService.sendMessageAddCategory();
+      })
+    );
   }
 
   addSubCategory(rowObj): void {
-    this.editCategoriesService.addSubCategory(rowObj.id, rowObj.subCategories.subCategory).subscribe(data => {
-      this.dataSource = data;
-      this.messengerService.sendMessageAddCategory();
-    });
+    this.subscription.add(
+      this.editCategoriesService.addSubCategory(rowObj.id, rowObj.subCategories.subCategory).subscribe(data => {
+        this.dataSource = data;
+        this.messengerService.sendMessageAddCategory();
+      })
+    );
   }
 
   updateRowData(rowObj): void {
@@ -83,11 +89,14 @@ export class EditCategoriesComponent implements OnInit {
         return true;
       });
 
-      this.editCategoriesService.updateMainCategory(rowObj.id, rowObj.mainCategory).subscribe(data => {
-        console.log(data);
-      }, error => {
-        console.log(error);
-      });
+      this.subscription.add(
+        this.editCategoriesService.updateMainCategory(rowObj.id, rowObj.mainCategory).subscribe(data => {
+          console.log(data);
+        }, error => {
+          this.messengerService.sendMessageAddCategory();
+          console.log(error);
+        })
+      );
     }
 
     if (rowObj.subCategory) {
@@ -100,33 +109,46 @@ export class EditCategoriesComponent implements OnInit {
         });
       });
 
-      this.editCategoriesService.updateSubCategory(rowObj.id, rowObj.subCategory).subscribe(data => {
-        console.log(data);
-      }, error => {
-        console.log(error);
-      });
+      this.subscription.add(
+        this.editCategoriesService.updateSubCategory(rowObj.id, rowObj.subCategory).subscribe(data => {
+          console.log(data);
+        }, error => {
+          this.messengerService.sendMessageAddCategory();
+          console.log(error);
+        })
+      );
     }
   }
 
   deleteRowData(rowObj): void {
 
     if (rowObj.mainCategory) {
-      this.editCategoriesService.deleteMainCategory(rowObj.id).subscribe(data => {
-      }, error => {
-        console.log(error);
-        this.dataSource = this.dataSource.filter((value, key) => {
-          return value.id !== rowObj.id;
-        });
-      });
+      this.subscription.add(
+        this.editCategoriesService.deleteMainCategory(rowObj.id).subscribe(data => {
+        }, error => {
+          this.messengerService.sendMessageAddCategory();
+          console.log(error);
+          this.dataSource = this.dataSource.filter((value, key) => {
+            return value.id !== rowObj.id;
+          });
+        })
+      );
     }
 
     if (rowObj.subCategory) {
-      this.editCategoriesService.deleteSubCategory(rowObj.id).subscribe(data => {
-        }, error => {
-          console.log(error);
-          this.loadCategories();
-        }
+      this.subscription.add(
+        this.editCategoriesService.deleteSubCategory(rowObj.id).subscribe(data => {
+          }, error => {
+            console.log(error);
+            this.messengerService.sendMessageAddCategory();
+            this.loadCategories();
+          }
+        )
       );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -7,6 +7,7 @@ import {Constants} from '../../config/constants';
 import {Observable} from 'rxjs';
 import {AuthenticationResponse} from '../../model/authentication-response';
 import {AuthenticationRequest} from '../../model/authentication-request';
+import {UserRoles} from '../../model/user-roles.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -29,18 +30,6 @@ export class AuthService {
 
   registerSuccessfulLogin(email: string, authResponse: AuthenticationResponse): void {
     this.userService.setAuthenticateNameToSessionStorage(`Bearer ${authResponse.jwtToken}`);
-    this.userService.setEmailToSessionStorage(email);
-  }
-
-  setUserToSessionStorage(): void {
-    this.userService.getUserDetailsByEmail(this.userService.getEmailFromSessionStorage()).subscribe(user => {
-      this.loggedInEmitterUser.emit(user);
-      this.userService.setUserIdToSessionStorage(String(user.id));
-      this.userService.setRoleToSessionStorage(user.role);
-      this.userService.setFirstNameToSessionStorage(user.firstName);
-      this.router.navigate(['', this.userService.getFirstNameFromSessionStorage()]).then(data => {
-      });
-    });
   }
 
   logout(): void {
@@ -59,4 +48,37 @@ export class AuthService {
   getJwtToken(): string {
     return this.userService.getAuthenticateNameFromSessionStorage();
   }
+
+  public getSession(): Promise<boolean> {
+    const session = this.getJwtToken();
+    return new Promise((resolve, reject) => {
+      if (session) {
+        return resolve(true);
+      } else {
+        this.router.navigateByUrl('login');
+        return reject(false);
+      }
+    });
+  }
+
+  public areUserRolesAllowed(userRole: string, allowedUserRoles: UserRoles[]): boolean {
+    for (const allowedRole of allowedUserRoles) {
+      if (userRole.toLowerCase() === allowedRole.toLowerCase()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public getUserRole(): Promise<string> {
+    const sessionRole = this.userService.getRoleFromSessionStorage();
+    return new Promise((resolve, reject) => {
+      if (sessionRole) {
+        return resolve(sessionRole);
+      } else {
+        return reject(false);
+      }
+    });
+  }
+
 }
