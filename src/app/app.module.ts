@@ -50,6 +50,7 @@ import { ConfirmationDialogComponent } from './components/confirmation-dialog/co
 import {ConfirmationDialogService} from './components/confirmation-dialog/confirmation-dialog.service';
 import { ExpandMenuDirective } from './directive/expand-menu.directive';
 import {ClickOutsideModule} from 'ng-click-outside';
+import {MatIconModule} from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import {ClickOutsideModule} from 'ng-click-outside';
     MatDialogModule,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     BrowserModule,
     BrowserAnimationsModule,
     ClickOutsideModule

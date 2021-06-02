@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   registerForm: FormGroup;
   passwordMatch = false;
   isEmailExist: string;
+  hidePass = true;
 
   constructor(private formBuilder: FormBuilder,
               private editUserService: UserService,
@@ -53,6 +54,8 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.isEmailExist = error.error;
         } else {
           this.isEmailExist = '';
+          this.registerForm.reset();
+          this.router.navigate(['login'], {queryParams: { registered: 'true' } });
         }
         console.log(error);
       })

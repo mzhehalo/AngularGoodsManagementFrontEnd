@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from './auth.service';
 import {UserService} from '../edit-user/user.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {OrderService} from '../order/order.service';
 import {CartService} from '../cart/cart.service';
@@ -20,6 +20,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorMessage: string;
   invalidLogin = false;
   loginSuccess = false;
+  hidePass = true;
+  infoMessage = '';
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,
@@ -28,6 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               private cartService: CartService,
               private orderService: OrderService,
               private wishlistService: WishlistService,
+              private activatedRoute: ActivatedRoute
   ) {
   }
 
@@ -36,6 +39,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    this.activatedRoute.queryParams
+      .subscribe(params => {
+        if (params.registered !== undefined && params.registered === 'true') {
+          this.infoMessage = 'Registration Successful! Please Login!';
+        }
+      });
+
   }
 
   authenticate(): void {
