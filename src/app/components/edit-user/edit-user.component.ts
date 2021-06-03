@@ -18,6 +18,7 @@ export class EditUserComponent implements OnInit, OnDestroy {
   passwordMatch = false;
   isEmailExist: string;
   role: string;
+  hidePass = true;
 
   constructor(private formBuilder: FormBuilder,
               private authService: AuthService,

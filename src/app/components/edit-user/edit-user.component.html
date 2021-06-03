@@ -1,6 +1,7 @@
 <div class="p-0 col col-lg-6 mt-3 mb-5 m-auto">
   <div class="list-group-item p-0">
-    <p class="d-flex justify-content-center mt-3 font-weight-bold">Editing of {{user.firstName + " " + user.lastName}}</p>
+    <p class="d-flex justify-content-center mt-3 font-weight-bold">Editing
+      of {{user.firstName + " " + user.lastName}}</p>
     <form class="p-3 border-top" [formGroup]="editUserForm">
       <div>
         <div>
@@ -32,8 +33,14 @@
 
         <div>
           <div class="mt-3">Password:*</div>
-          <input class="mt-1"
-                 formControlName="password">
+          <div class="d-flex justify-content-end align-items-end">
+            <input class="mt-1"
+                   matInput
+                   [type]="hidePass ? 'password' : 'text'"
+                   formControlName="password">
+            <mat-icon matSuffix class="ml-2 cursor-pointer"
+                      (click)="hidePass = !hidePass">{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </div>
         </div>
         <div class="alert alert-danger mt-1"
              *ngIf="editUserForm.controls['password'].invalid &&
@@ -45,6 +52,8 @@
         <div>
           <div class="mt-3">Confirm password:*</div>
           <input class="mt-1"
+                 matInput
+                 [type]="hidePass ? 'password' : 'text'"
                  formControlName="confirmPassword">
         </div>
         <div class="alert alert-danger mt-1"
